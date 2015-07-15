@@ -8,10 +8,10 @@
       contains
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE part_setup_buf(xp_buf,vp_buf)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real vp_buf(Ni_max_buf,3)
       real xp_buf(Ni_max_buf,3)
@@ -26,10 +26,10 @@ c      include 'incurv.h'
 
       Ni_tot_buf = nint(nf_init*vol_buf*beta)
 
-c      write(*,*) 'Ni_tot_buf....',Ni_tot_buf,Ni_max_buf,Ni_tot,my_rank
+!      write(*,*) 'Ni_tot_buf....',Ni_tot_buf,Ni_max_buf,Ni_tot,my_rank
       
 
-c initialize protons
+! initialize protons
 
       do 10 l = 1,Ni_tot_buf
 
@@ -49,14 +49,14 @@ c initialize protons
  10   continue
          
       
-c      m_arr_buf(1:Ni_tot_buf) = mproton
-c      m_arr_buf(Ni_tot_buf+1:) = m_pu*mproton 
+!      m_arr_buf(1:Ni_tot_buf) = mproton
+!      m_arr_buf(Ni_tot_buf+1:) = m_pu*mproton 
       mrat_buf(1:Ni_tot_buf) = 1.0
       mrat_buf(Ni_tot_buf+1:) = 1.0/m_pu       
       beta_p_buf(1:Ni_tot_buf) = 1.0
       beta_p_buf(Ni_tot_buf+1:) = 1.0
 
-c initialize He++ (m/q =2) 
+! initialize He++ (m/q =2) 
 
       Ni_tot_buf_1 = Ni_tot_buf
       Ni_tot_buf = Ni_tot_buf_1 + f_mq_2*Ni_tot_buf_1
@@ -77,13 +77,13 @@ c initialize He++ (m/q =2)
          vp_buf(l,2) = vy 
          vp_buf(l,3) = vz 
 
-c         m_arr_buf(l) = 2*mproton
+!         m_arr_buf(l) = 2*mproton
          mrat_buf(l) = 1./2.
          beta_p_buf(l) = b_mq_2
 
  20   continue
          
-c add shell distribution
+! add shell distribution
 
       Ni_tot_buf_1 = Ni_tot_buf 
       
@@ -95,7 +95,7 @@ c add shell distribution
          xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
          xp_buf(l,3) = qz(2)+(1.0-pad_ranf())*(qz(nz)-qz(2))
          
-c         m_arr_buf(l) = mproton
+!         m_arr_buf(l) = mproton
          mrat_buf(l) = 1.0
          beta_p_buf(l) = b_shl
          
@@ -111,22 +111,22 @@ c         m_arr_buf(l) = mproton
 
       return
       end SUBROUTINE part_setup_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE part_setup_out_buf(xp_out_buf,vp_out_buf,E_out_buf,
      x            B_out_buf,mrat_out_buf,b0)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real vp_out_buf(Ni_max_buf,3)
       real xp_out_buf(Ni_max_buf,3)
       real E_out_buf(Ni_max_buf,3)
       real B_out_buf(Ni_max_buf,3)
       real mrat_out_buf(Ni_max_buf)
-c      real m_arr_out_buf(Ni_max_buf)
+!      real m_arr_out_buf(Ni_max_buf)
       real b0(nx,ny,nz,3)
       real rnd,f,v
       real vx,vy,vz
@@ -194,22 +194,22 @@ c      real m_arr_out_buf(Ni_max_buf)
  10   continue
          
       
-c      m_arr_out_buf(1:Ni_tot_out_buf) = mproton
-c      m_arr_out_buf(Ni_tot_out_buf+1:) = m_pu*mproton 
+!      m_arr_out_buf(1:Ni_tot_out_buf) = mproton
+!      m_arr_out_buf(Ni_tot_out_buf+1:) = m_pu*mproton 
       mrat_out_buf(1:Ni_tot_out_buf) = 1.0
       mrat_out_buf(Ni_tot_out_buf+1:) = 1.0/m_pu       
 
       return
       end SUBROUTINE part_setup_out_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_Ep_buf(Ep_buf,b0,xp_buf,up)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real Ep_buf(Ni_max_buf,3)
       real b0(nx,ny,nz,3)
@@ -222,21 +222,21 @@ c      include 'incurv.h'
       real up3(3),  !vector field values at Ba position
      x      btc3(3)
 
-c      real eoverm
-c      parameter (eoverm = q/mO)
+!      real eoverm
+!      parameter (eoverm = q/mO)
 
       do 10 l=1,Ni_tot_buf
 
-cc         i = floor(xp_buf(l,1)/dx)
-c         j = floor(xp_buf(l,2)/dy)
-c         k = floor(xp_buf(l,3)/delz)
+!c         i = floor(xp_buf(l,1)/dx)
+!         j = floor(xp_buf(l,2)/dy)
+!         k = floor(xp_buf(l,3)/delz)
          
-c         i=0
-c 31      continue
-c         i = i + 1
-c         if (xp(l,1) .gt. qx(i)) go to 31 !find i on non-uniform 
-c         i = i-1
-c         ijkp(l,1)= i
+!         i=0
+! 31      continue
+!         i = i + 1
+!         if (xp(l,1) .gt. qx(i)) go to 31 !find i on non-uniform 
+!         i = i-1
+!         ijkp(l,1)= i
 
          j=0
  33      continue
@@ -253,9 +253,9 @@ c         ijkp(l,1)= i
          ijkp(l,3)= k
          
 
-c         up3(1) = -vsw
-c         up3(2) = 0.0
-c         up3(3) = 0.0
+!         up3(1) = -vsw
+!         up3(2) = 0.0
+!         up3(3) = 0.0
 
          up3(1) = up(nx,j,k,1)
          up3(2) = up(nx,j,k,2)
@@ -285,15 +285,15 @@ c         up3(3) = 0.0
 
       return
       end SUBROUTINE get_Ep_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_vplus_vminus_buf(Ep_buf,vp_buf,vplus_buf,
      x                                vminus_buf,b0)
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
-c      include 'incurv.h'
+!      include 'incurv.h'
 
       real Ep_buf(Ni_max_buf,3),
      x     vp_buf(Ni_max_buf,3),      !particle velocities at t level n-1/2
@@ -354,13 +354,13 @@ c      include 'incurv.h'
 
       return
       end SUBROUTINE get_vplus_vminus_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_vp_buf_final(Ep_buf,vp_buf,vplus_buf)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real Ep_buf(Ni_max_buf,3),
      x     vp_buf(Ni_max_buf,3),    !particle velocities at t level n+1/2
@@ -373,13 +373,13 @@ c      include 'incurv.h'
 
       return
       end SUBROUTINE get_vp_buf_final
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE exchange_ion_half_buf(xp_buf,vp_buf,xp,vp,vp1)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real xp_buf(Ni_max_buf,3),
      x     vp_buf(Ni_max_buf,3),
@@ -390,7 +390,7 @@ c      include 'incurv.h'
      
       real, dimension(:,:), allocatable :: out_xp
       real, dimension(:,:), allocatable :: out_vp
-c      real, dimension(:), allocatable :: out_m_arr
+!      real, dimension(:), allocatable :: out_m_arr
       real, dimension(:), allocatable :: out_mrat
       real, dimension(:), allocatable :: out_beta_p
 
@@ -405,7 +405,7 @@ c      real, dimension(:), allocatable :: out_m_arr
 
       allocate(out_xp(Ni_out,3))
       allocate(out_vp(Ni_out,3))
-c      allocate(out_m_arr(Ni_out))
+!      allocate(out_m_arr(Ni_out))
       allocate(out_mrat(Ni_out))
       allocate(out_beta_p(Ni_out))
       
@@ -422,16 +422,16 @@ c      allocate(out_m_arr(Ni_out))
 
       enddo
 
-c      out_m_arr(1:Ni_out) = pack(m_arr_buf(1:Ni_tot_buf), 
-c     x                            .not.in_bounds_buf(1:Ni_tot_buf))
+!      out_m_arr(1:Ni_out) = pack(m_arr_buf(1:Ni_tot_buf), 
+!     x                            .not.in_bounds_buf(1:Ni_tot_buf))
       out_mrat(1:Ni_out) = pack(mrat_buf(1:Ni_tot_buf), 
      x                            .not.in_bounds_buf(1:Ni_tot_buf))
 
       out_beta_p(1:Ni_out) = pack(beta_p_buf(1:Ni_tot_buf), 
      x                            .not.in_bounds_buf(1:Ni_tot_buf))
 
-c      m_arr_buf(1:Ni_tot_in) = pack(m_arr_buf(1:Ni_tot_buf), 
-c     x                              in_bounds_buf(1:Ni_tot_buf))
+!      m_arr_buf(1:Ni_tot_in) = pack(m_arr_buf(1:Ni_tot_buf), 
+!     x                              in_bounds_buf(1:Ni_tot_buf))
       mrat_buf(1:Ni_tot_in) = pack(mrat_buf(1:Ni_tot_buf), 
      x                             in_bounds_buf(1:Ni_tot_buf))
       
@@ -448,11 +448,11 @@ c     x                              in_bounds_buf(1:Ni_tot_buf))
       enddo
 
 
-c      ijkp(Ni_tot+1:Ni_tot+Ni_out,1) = 
-c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,1)/dx)
-cc      wquad(Ni_tot+1:Ni_tot+Ni_out,1) = -1.0
-c      ijkp(Ni_tot+1:Ni_tot+Ni_out,2) = 
-c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
+!      ijkp(Ni_tot+1:Ni_tot+Ni_out,1) = 
+!     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,1)/dx)
+!c      wquad(Ni_tot+1:Ni_tot+Ni_out,1) = -1.0
+!      ijkp(Ni_tot+1:Ni_tot+Ni_out,2) = 
+!     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
 
       do l = Ni_tot+1,Ni_tot+Ni_out 
 
@@ -478,21 +478,21 @@ c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
          ijkp(l,3)= kk
 
 
-c         k=1
-c         do 50 while(xp(l,3) .gt. qz(k)) !find k on non-uniform 
-c            ijkp(l,3) = k       !grid
-c            k=k+1
-c 50      continue
-c         k=ijkp(l,3)
-c         if (xp(l,3) .gt. (qz(k)+(dz_grid(k)/2))) then
-c            ijkp(l,3) = k+1
-c         endif
+!         k=1
+!         do 50 while(xp(l,3) .gt. qz(k)) !find k on non-uniform 
+!            ijkp(l,3) = k       !grid
+!            k=k+1
+! 50      continue
+!         k=ijkp(l,3)
+!         if (xp(l,3) .gt. (qz(k)+(dz_grid(k)/2))) then
+!            ijkp(l,3) = k+1
+!         endif
 
-c         beta_p(l) = 1.0    !add as solar wind ions
+!         beta_p(l) = 1.0    !add as solar wind ions
 
       enddo
 
-c      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
+!      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
       mrat(Ni_tot+1:Ni_tot+Ni_out) = out_mrat(:)
       beta_p(Ni_tot+1:Ni_tot+Ni_out) = out_beta_p(:)
       
@@ -500,7 +500,7 @@ c      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
          do m=1,3
             input_E = input_E + 
      x         0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /(beta*beta_p(l))
-c            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
+!            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
          enddo
       enddo
 
@@ -510,20 +510,20 @@ c            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
 
       deallocate(out_xp)
       deallocate(out_vp)
-c      deallocate(out_m_arr)
+!      deallocate(out_m_arr)
       deallocate(out_mrat)
       deallocate(out_beta_p)
 
 
       return
       end SUBROUTINE exchange_ion_half_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE move_ion_half_buf(xp_buf,vp_buf,xp,vp,vp1)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real xp_buf(Ni_max_buf,3),
      x     vp_buf(Ni_max_buf,3),
@@ -540,13 +540,13 @@ c      include 'incurv.h'
       
       real, dimension(:,:), allocatable :: out_xp
       real, dimension(:,:), allocatable :: out_vp
-c      real, dimension(:), allocatable :: out_m_arr
+!      real, dimension(:), allocatable :: out_m_arr
       real, dimension(:), allocatable :: out_mrat
 
       dth = dt/2
 
-c      write(*,*) 'Ni_tot_buf before move...',Ni_tot_buf,dNi_sw
-c      stop
+!      write(*,*) 'Ni_tot_buf before move...',Ni_tot_buf,dNi_sw
+!      stop
 
       do 10 l=1,Ni_tot_buf                   !make 1/2 time step advance
 
@@ -576,101 +576,101 @@ c      stop
 
 
 
-c add protons
+! add protons
 
-c      do l = Ni_tot_buf+1,Ni_tot_buf+dNi_sw
+!      do l = Ni_tot_buf+1,Ni_tot_buf+dNi_sw
 
-c            xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
-c            xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
-c            xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
+!            xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
+!            xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
+!            xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
 
-c            vth = 0.5*(vth_top + vth_bottom) + 
-c     x      0.5*(vth_top - vth_bottom)*tanh((qz(ijkp(l,3))-qz(nz/2))/Lo)
+!            vth = 0.5*(vth_top + vth_bottom) + 
+!     x      0.5*(vth_top - vth_bottom)*tanh((qz(ijkp(l,3))-qz(nz/2))/Lo)
 
-c            call maxwl_init(vth,vx,vy,vz)
+!            call maxwl_init(vth,vx,vy,vz)
             
-c            vp_buf(l,1) = -vsw + vx
-c            vp_buf(l,2) = vy
-c            vp_buf(l,3) = vz
+!            vp_buf(l,1) = -vsw + vx
+!            vp_buf(l,2) = vy
+!            vp_buf(l,3) = vz
             
-cc            m_arr_buf(l) = mproton
-c            mrat_buf(l) = 1.0
-c            beta_p_buf(l) = 1.0
-c      enddo
+!c            m_arr_buf(l) = mproton
+!            mrat_buf(l) = 1.0
+!            beta_p_buf(l) = 1.0
+!      enddo
 
-c      Ni_tot_buf = Ni_tot_buf + dNi_sw
+!      Ni_tot_buf = Ni_tot_buf + dNi_sw
 
 
-cc add He ++
+!c add He ++
 
-c      Ni_tot_buf_1 = Ni_tot_buf
-c      Ni_tot_buf = Ni_tot_buf_1 + f_mq_2*dNi_sw
-c      
-c      do l = Ni_tot_buf_1+1,Ni_tot_buf
+!      Ni_tot_buf_1 = Ni_tot_buf
+!      Ni_tot_buf = Ni_tot_buf_1 + f_mq_2*dNi_sw
+!      
+!      do l = Ni_tot_buf_1+1,Ni_tot_buf
 
-c            xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
-c            xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
-c            xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
+!            xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
+!            xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
+!            xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
 
-c            vth = 0.5*(vth_top + vth_bottom) + 
-c     x      0.5*(vth_top - vth_bottom)*tanh((qz(ijkp(l,3))-qz(nz/2))/Lo)
+!            vth = 0.5*(vth_top + vth_bottom) + 
+!     x      0.5*(vth_top - vth_bottom)*tanh((qz(ijkp(l,3))-qz(nz/2))/Lo)
             
-c            call maxwl_init(vth,vx,vy,vz)
+!            call maxwl_init(vth,vx,vy,vz)
 
-c            vp_buf(l,1) = -vsw + vx
-c            vp_buf(l,2) = vy
-c            vp_buf(l,3) = vz
-c            
-cc            m_arr_buf(l) = 2.0*mproton
-c            mrat_buf(l) = 1.0/2.0
-c            beta_p_buf(l) = b_mp_2
+!            vp_buf(l,1) = -vsw + vx
+!            vp_buf(l,2) = vy
+!            vp_buf(l,3) = vz
+!            
+!c            m_arr_buf(l) = 2.0*mproton
+!            mrat_buf(l) = 1.0/2.0
+!            beta_p_buf(l) = b_mp_2
 
-c      enddo
+!      enddo
 
-cc add shell distribution
+!c add shell distribution
 
-c      Ni_tot_buf_1 = Ni_tot_buf 
+!      Ni_tot_buf_1 = Ni_tot_buf 
       
-c      Ni_tot_buf = Ni_tot_buf_1 + f_shl*dNi_sw
+!      Ni_tot_buf = Ni_tot_buf_1 + f_shl*dNi_sw
       
-c      do 69 l = Ni_tot_buf_1+1,Ni_tot_buf
+!      do 69 l = Ni_tot_buf_1+1,Ni_tot_buf
          
-c         xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
-c         xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
-c         xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
+!         xp_buf(l,1) = (qx(nx)+dx_buf) - 10*pad_ranf()*vsw*dt/2 
+!         xp_buf(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
+!         xp_buf(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz)-qz(2))
          
-cc         m_arr_buf(l) = mproton
-c         mrat_buf(l) = 1.0
-c         beta_p_buf(l) = b_shl
+!c         m_arr_buf(l) = mproton
+!         mrat_buf(l) = 1.0
+!         beta_p_buf(l) = b_shl
          
-c         theta = pad_ranf()*PI
-c         phi = pad_ranf()*2*PI
+!         theta = pad_ranf()*PI
+!         phi = pad_ranf()*2*PI
          
-c         vp_buf(l,1) = -vsw+vsw*cos(phi)*sin(theta) !+dvx
-c         vp_buf(l,2) = vsw*sin(phi)*sin(theta) !+dvz 
-c         vp_buf(l,3) = vsw*cos(theta)
+!         vp_buf(l,1) = -vsw+vsw*cos(phi)*sin(theta) !+dvx
+!         vp_buf(l,2) = vsw*sin(phi)*sin(theta) !+dvz 
+!         vp_buf(l,3) = vsw*cos(theta)
          
-c 69   enddo
+! 69   enddo
 
 
 
       return
       end SUBROUTINE move_ion_half_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE exchange_ion_out_buf(xp_out_buf,vp_out_buf,E_out_buf,
      x        B_out_buf,mrat_out_buf,xp,vp,vp1)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real xp_out_buf(Ni_max_buf,3),
      x     vp_out_buf(Ni_max_buf,3),
      x     E_out_buf(Ni_max_buf,3),
      x     B_out_buf(Ni_max_buf,3),
      x     mrat_out_buf(Ni_max_buf),
-c     x     m_arr_out_buf(Ni_max_buf),
+!     x     m_arr_out_buf(Ni_max_buf),
      x     xp(Ni_max,3),
      x     vp(Ni_max,3),
      x     vp1(Ni_max,3)
@@ -680,11 +680,11 @@ c     x     m_arr_out_buf(Ni_max_buf),
      
       real, dimension(:,:), allocatable :: out_xp
       real, dimension(:,:), allocatable :: out_vp
-c      real, dimension(:), allocatable :: out_m_arr
+!      real, dimension(:), allocatable :: out_m_arr
       real, dimension(:), allocatable :: out_mrat
 
 
-c move back into main domain
+! move back into main domain
 
       in_bounds_buf(1:Ni_tot_out_buf) = .true.
       in_bounds_buf(Ni_tot_out_buf+1:) = .false.
@@ -697,7 +697,7 @@ c move back into main domain
 
       allocate(out_xp(Ni_out,3))
       allocate(out_vp(Ni_out,3))
-c      allocate(out_m_arr(Ni_out))
+!      allocate(out_m_arr(Ni_out))
       allocate(out_mrat(Ni_out))
       
       do m = 1,3 
@@ -714,13 +714,13 @@ c      allocate(out_m_arr(Ni_out))
       enddo
 
 
-c      out_m_arr(1:Ni_out) = pack(m_arr_out_buf(1:Ni_tot_out_buf), 
-c     x                            .not.in_bounds_buf(1:Ni_tot_out_buf))
+!      out_m_arr(1:Ni_out) = pack(m_arr_out_buf(1:Ni_tot_out_buf), 
+!     x                            .not.in_bounds_buf(1:Ni_tot_out_buf))
       out_mrat(1:Ni_out) = pack(mrat_out_buf(1:Ni_tot_out_buf), 
      x                            .not.in_bounds_buf(1:Ni_tot_out_buf))
 
-c      m_arr_out_buf(1:Ni_tot_in) = pack(m_arr_buf(1:Ni_tot_out_buf), 
-c     x                              in_bounds_buf(1:Ni_tot_out_buf))
+!      m_arr_out_buf(1:Ni_tot_in) = pack(m_arr_buf(1:Ni_tot_out_buf), 
+!     x                              in_bounds_buf(1:Ni_tot_out_buf))
       mrat_out_buf(1:Ni_tot_in) = pack(mrat_out_buf(1:Ni_tot_out_buf), 
      x                             in_bounds_buf(1:Ni_tot_out_buf))
 
@@ -731,11 +731,11 @@ c     x                              in_bounds_buf(1:Ni_tot_out_buf))
          vp1(Ni_tot+1:Ni_tot+Ni_out,m) = out_vp(:,m)
       enddo
 
-c      ijkp(Ni_tot+1:Ni_tot+Ni_out,1) = 
-c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,1)/dx)
-cc      wquad(Ni_tot+1:Ni_tot+Ni_out,1) = -1.0
-c      ijkp(Ni_tot+1:Ni_tot+Ni_out,2) = 
-c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
+!      ijkp(Ni_tot+1:Ni_tot+Ni_out,1) = 
+!     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,1)/dx)
+!c      wquad(Ni_tot+1:Ni_tot+Ni_out,1) = -1.0
+!      ijkp(Ni_tot+1:Ni_tot+Ni_out,2) = 
+!     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
 
       do l = Ni_tot+1,Ni_tot+Ni_out 
 
@@ -762,22 +762,22 @@ c     x          floor(xp(Ni_tot+1:Ni_tot+Ni_out,2)/dy)
          ijkp(l,3)= kk
 
 
-c         k=1
-c         do 50 while(xp(l,3) .gt. qz(k)) !find k on non-uniform 
-c            ijkp(l,3) = k       !grid
-c            k=k+1
-c 50      continue
-c         k=ijkp(l,3)
-c         if (xp(l,3) .gt. (qz(k)+(dz_grid(k)/2))) then
-c            ijkp(l,3) = k+1
-c         endif
+!         k=1
+!         do 50 while(xp(l,3) .gt. qz(k)) !find k on non-uniform 
+!            ijkp(l,3) = k       !grid
+!            k=k+1
+! 50      continue
+!         k=ijkp(l,3)
+!         if (xp(l,3) .gt. (qz(k)+(dz_grid(k)/2))) then
+!            ijkp(l,3) = k+1
+!         endif
          
          write(*,*) 'k in...',ijkp(l,3),xp(l,3),Ni_out
       enddo
 
 
 
-c      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
+!      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
       mrat(Ni_tot+1:Ni_tot+Ni_out) = out_mrat(:)
       beta_p(Ni_tot+1:Ni_tot+Ni_out) = 1.0 !need particle history still
 
@@ -785,7 +785,7 @@ c      m_arr(Ni_tot+1:Ni_tot+Ni_out) = out_m_arr(:)
          do m=1,3
             input_E = input_E + 
      x         0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /(beta*beta_p(l))
-c            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
+!            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
          enddo
       enddo
 
@@ -796,11 +796,11 @@ c            input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta
 
       deallocate(out_xp)
       deallocate(out_vp)
-c      deallocate(out_m_arr)
+!      deallocate(out_m_arr)
       deallocate(out_mrat)
 
 
-c remove completely from out buf after 10 dx.
+! remove completely from out buf after 10 dx.
 
       in_bounds_buf(1:Ni_tot_out_buf) = .true.
       in_bounds_buf(Ni_tot_out_buf+1:) = .false.
@@ -811,7 +811,7 @@ c remove completely from out buf after 10 dx.
       Ni_tot_in = count(in_bounds_buf)
       Ni_out = count(.not.in_bounds_buf(1:Ni_tot_out_buf))
 
-c      write(*,*) 'Ni out removed past 10 dx...',Ni_out
+!      write(*,*) 'Ni out removed past 10 dx...',Ni_out
          
       do m = 1,3
             
@@ -829,9 +829,9 @@ c      write(*,*) 'Ni out removed past 10 dx...',Ni_out
         mrat_out_buf(1:Ni_tot_in) = 
      x           pack(mrat_out_buf(1:Ni_tot_out_buf), 
      x           in_bounds_buf(1:Ni_tot_out_buf))
-c        m_arr_out_buf(1:Ni_tot_in) = 
-c     x           pack(m_arr_out_buf(1:Ni_tot_out_buf), 
-c     x           in_bounds_buf(1:Ni_tot_out_buf))
+!        m_arr_out_buf(1:Ni_tot_in) = 
+!     x           pack(m_arr_out_buf(1:Ni_tot_out_buf), 
+!     x           in_bounds_buf(1:Ni_tot_out_buf))
 
 
 
@@ -840,25 +840,25 @@ c     x           in_bounds_buf(1:Ni_tot_out_buf))
 
       return
       end SUBROUTINE exchange_ion_out_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE move_ion_out_buf(xp_out_buf,vp_out_buf,E_out_buf,
      x        B_out_buf,mrat_out_buf)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real xp_out_buf(Ni_max_buf,3),
      x     vp_out_buf(Ni_max_buf,3),
      x     E_out_buf(Ni_max_buf,3),
      x     B_out_buf(Ni_max_buf,3),
      x     mrat_out_buf(Ni_max_buf)
-c     x     m_arr_out_buf(Ni_max_buf)
-c     x     xp(Ni_max,3),
-c     x     vp(Ni_max,3),
-c     x     vp1(Ni_max,3)
+!     x     m_arr_out_buf(Ni_max_buf)
+!     x     xp(Ni_max,3),
+!     x     vp(Ni_max,3),
+!     x     vp1(Ni_max,3)
       integer source, dest
       integer reqs(2)
       integer stats(MPI_STATUS_SIZE,2)
@@ -881,8 +881,8 @@ c     x     vp1(Ni_max,3)
 
       dth = dt/2      
 
-c      write(*,*) 'Ni_tot_buf before move...',Ni_tot_buf,dNi_sw
-c      stop
+!      write(*,*) 'Ni_tot_buf before move...',Ni_tot_buf,dNi_sw
+!      stop
 
       do 10 l=1,Ni_tot_out_buf                   !make 1/2 time step advance
 
@@ -898,7 +898,7 @@ c      stop
 
  10      continue
 
-c         write(*,*) 'xp, vp...',xp_out_buf(1,:),vp_out_buf(1,:)
+!         write(*,*) 'xp, vp...',xp_out_buf(1,:),vp_out_buf(1,:)
 
       where (xp_out_buf(:,2) .ge. qy(ny-1))
          xp_out_buf(:,2) = qy(1) + ( xp_out_buf(:,2) - qy(ny-1) )
@@ -908,322 +908,322 @@ c         write(*,*) 'xp, vp...',xp_out_buf(1,:),vp_out_buf(1,:)
          xp_out_buf(:,2) = qy(ny-1) - (qy(1) - xp_out_buf(:,2))
       endwhere
 
-c -------------------z exchange, up-----------------------------
+! -------------------z exchange, up-----------------------------
 
-c      call MPI_Barrier(MPI_COMM_WORLD,ierr)
+!      call MPI_Barrier(MPI_COMM_WORLD,ierr)
 
-c      ib_out_buf(1:Ni_tot_out_buf) = .true.
-c      ib_out_buf(Ni_tot_out_buf+1:) = .false.
+!      ib_out_buf(1:Ni_tot_out_buf) = .true.
+!      ib_out_buf(Ni_tot_out_buf+1:) = .false.
 
 
-c      where (xp_out_buf(1:Ni_tot_out_buf,3) .gt. qz(nz))
-c         ib_out_buf(1:Ni_tot_out_buf)= .false.
-c         xp_out_buf(1:Ni_tot_out_buf,3) = qz(2)+
-c     x        (xp_out_buf(1:Ni_tot_out_buf,3)-qz(nz))
-c      endwhere
+!      where (xp_out_buf(1:Ni_tot_out_buf,3) .gt. qz(nz))
+!         ib_out_buf(1:Ni_tot_out_buf)= .false.
+!         xp_out_buf(1:Ni_tot_out_buf,3) = qz(2)+
+!     x        (xp_out_buf(1:Ni_tot_out_buf,3)-qz(nz))
+!      endwhere
 
-c      Ni_tot_in = count(ib_out_buf(1:Ni_tot_out_buf))
+!      Ni_tot_in = count(ib_out_buf(1:Ni_tot_out_buf))
 
-c      Ni_out = count(.not.ib_out_buf(1:Ni_tot_out_buf))
+!      Ni_out = count(.not.ib_out_buf(1:Ni_tot_out_buf))
 
-cc      write(*,*) 'out buf exchange up....',Ni_out
+!c      write(*,*) 'out buf exchange up....',Ni_out
 
-c      allocate(out_part(Ni_out,3))
-c      allocate(out_mass(Ni_out))
+!      allocate(out_part(Ni_out,3))
+!      allocate(out_mass(Ni_out))
 
-c      dest = nbrs(n_up)
-c      source = nbrs(n_down)
+!      dest = nbrs(n_up)
+!      source = nbrs(n_down)
 
-c      call MPI_SEND(Ni_out, 1, MPI_INTEGER, dest, tag, 
-c     x     cartcomm, ierr)
-c      call MPI_RECV(Ni_in, 1, MPI_INTEGER, source, tag,
-c     x     cartcomm, stat, ierr)
+!      call MPI_SEND(Ni_out, 1, MPI_INTEGER, dest, tag, 
+!     x     cartcomm, ierr)
+!      call MPI_RECV(Ni_in, 1, MPI_INTEGER, source, tag,
+!     x     cartcomm, stat, ierr)
       
-c      allocate(in_part(Ni_in,3))
-c      allocate(in_mass(Ni_in))
+!      allocate(in_part(Ni_in,3))
+!      allocate(in_mass(Ni_in))
 
-c      do m = 1,3
-c        out_part(1:Ni_out,m) = 
-c     x        pack(xp_out_buf(1:Ni_tot_out_buf,m),  
-c     x        .not.ib_out_buf(1:Ni_tot_out_buf))
-c        xp_out_buf(1:Ni_tot_in,m) = pack(xp_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
-
-
+!      do m = 1,3
+!        out_part(1:Ni_out,m) = 
+!     x        pack(xp_out_buf(1:Ni_tot_out_buf,m),  
+!     x        .not.ib_out_buf(1:Ni_tot_out_buf))
+!        xp_out_buf(1:Ni_tot_in,m) = pack(xp_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      xp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
+!      xp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         vp_out_buf(1:Ni_tot_in,m) = 
-c     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         vp_out_buf(1:Ni_tot_in,m) = 
+!     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      vp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(E_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         E_out_buf(1:Ni_tot_in,m) = pack(E_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      vp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(E_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         E_out_buf(1:Ni_tot_in,m) = pack(E_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      E_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(B_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         B_out_buf(1:Ni_tot_in,m) = pack(B_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      E_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(B_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         B_out_buf(1:Ni_tot_in,m) = pack(B_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      B_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      out_mass(1:Ni_out) = 
-c     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), .not.
-c     x     ib_out_buf(1:Ni_tot_out_buf))
-c      m_arr_out_buf(1:Ni_tot_in) = 
-c     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), 
-c     x     ib_out_buf(1:Ni_tot_out_buf))
+!      B_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      out_mass(1:Ni_out) = 
+!     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), .not.
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+!      m_arr_out_buf(1:Ni_tot_in) = 
+!     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), 
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      m_arr_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
-
-
-c      out_mass(1:Ni_out) = 
-c     x     pack(mrat_out_buf(1:Ni_tot_out_buf), .not.
-c     x     ib_out_buf(1:Ni_tot_out_buf))
-c      mrat_out_buf(1:Ni_tot_in) = 
-c     x     pack(mrat_out_buf(1:Ni_tot_out_buf), 
-c     x     ib_out_buf(1:Ni_tot_out_buf))
+!      m_arr_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      out_mass(1:Ni_out) = 
+!     x     pack(mrat_out_buf(1:Ni_tot_out_buf), .not.
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+!      mrat_out_buf(1:Ni_tot_in) = 
+!     x     pack(mrat_out_buf(1:Ni_tot_out_buf), 
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      mrat_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
-
-
-cc      write(*,*) 'Ni_tot_out_buf...',Ni_tot_out_buf,Ni_out,Ni_in,qz(2)
-
-c      Ni_tot_out_buf = Ni_tot_out_buf - Ni_out + Ni_in
-
-c      deallocate(out_part)
-c      deallocate(out_mass)
-
-c      deallocate(in_part)
-c      deallocate(in_mass)
+!      mrat_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
 
 
+!c      write(*,*) 'Ni_tot_out_buf...',Ni_tot_out_buf,Ni_out,Ni_in,qz(2)
+
+!      Ni_tot_out_buf = Ni_tot_out_buf - Ni_out + Ni_in
+
+!      deallocate(out_part)
+!      deallocate(out_mass)
+
+!      deallocate(in_part)
+!      deallocate(in_mass)
 
 
 
-c -------------------z exchange, down-----------------------------
-
-c      call MPI_Barrier(MPI_COMM_WORLD,ierr)
-
-c      ib_out_buf(1:Ni_tot_out_buf) = .true.
-c      ib_out_buf(Ni_tot_out_buf+1:) = .false.
 
 
+! -------------------z exchange, down-----------------------------
 
-c      where (xp_out_buf(1:Ni_tot_out_buf,3) .le. qz(2))
-c         ib_out_buf(1:Ni_tot_out_buf)= .false.
-c         xp_out_buf(1:Ni_tot_out_buf,3) = qz(nz)-
-c     x        (qz(2)-xp_out_buf(1:Ni_tot_out_buf,3))
-c      endwhere
+!      call MPI_Barrier(MPI_COMM_WORLD,ierr)
 
-c      Ni_tot_in = count(ib_out_buf(1:Ni_tot_out_buf))
-
-c      Ni_out = count(.not.ib_out_buf(1:Ni_tot_out_buf))
+!      ib_out_buf(1:Ni_tot_out_buf) = .true.
+!      ib_out_buf(Ni_tot_out_buf+1:) = .false.
 
 
-c      allocate(out_part(Ni_out,3))
-c      allocate(out_mass(Ni_out))
 
-c      dest = nbrs(n_down)
-c      source = nbrs(n_up)
+!      where (xp_out_buf(1:Ni_tot_out_buf,3) .le. qz(2))
+!         ib_out_buf(1:Ni_tot_out_buf)= .false.
+!         xp_out_buf(1:Ni_tot_out_buf,3) = qz(nz)-
+!     x        (qz(2)-xp_out_buf(1:Ni_tot_out_buf,3))
+!      endwhere
 
-c      call MPI_SEND(Ni_out, 1, MPI_INTEGER, dest, tag, 
-c     x     cartcomm, ierr)
-c      call MPI_RECV(Ni_in, 1, MPI_INTEGER, source, tag,
-c     x     cartcomm, stat, ierr)
+!      Ni_tot_in = count(ib_out_buf(1:Ni_tot_out_buf))
+
+!      Ni_out = count(.not.ib_out_buf(1:Ni_tot_out_buf))
+
+
+!      allocate(out_part(Ni_out,3))
+!      allocate(out_mass(Ni_out))
+
+!      dest = nbrs(n_down)
+!      source = nbrs(n_up)
+
+!      call MPI_SEND(Ni_out, 1, MPI_INTEGER, dest, tag, 
+!     x     cartcomm, ierr)
+!      call MPI_RECV(Ni_in, 1, MPI_INTEGER, source, tag,
+!     x     cartcomm, stat, ierr)
       
-c      allocate(in_part(Ni_in,3))
-c      allocate(in_mass(Ni_in))
+!      allocate(in_part(Ni_in,3))
+!      allocate(in_mass(Ni_in))
 
-c      do m = 1,3
-c        out_part(1:Ni_out,m) = 
-c     x        pack(xp_out_buf(1:Ni_tot_out_buf,m), .not. 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c        xp_out_buf(1:Ni_tot_in,m) = pack(xp_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      do m = 1,3
+!        out_part(1:Ni_out,m) = 
+!     x        pack(xp_out_buf(1:Ni_tot_out_buf,m), .not. 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!        xp_out_buf(1:Ni_tot_in,m) = pack(xp_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
 
-cc      write(*,*) 'out_part...',out_part(1:Ni_out,1)
+!c      write(*,*) 'out_part...',out_part(1:Ni_out,1)
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      xp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
+!      xp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         vp_out_buf(1:Ni_tot_in,m) = 
-c     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         vp_out_buf(1:Ni_tot_in,m) = 
+!     x        pack(vp_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      vp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(E_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         E_out_buf(1:Ni_tot_in,m) = pack(E_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      vp_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(E_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         E_out_buf(1:Ni_tot_in,m) = pack(E_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      E_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      do m = 1,3
-c         out_part(1:Ni_out,m) = 
-c     x        pack(B_out_buf(1:Ni_tot_out_buf,m), .not.
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c         B_out_buf(1:Ni_tot_in,m) = pack(B_out_buf(1:Ni_tot_out_buf,m), 
-c     x        ib_out_buf(1:Ni_tot_out_buf))
-c      enddo
+!      E_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      do m = 1,3
+!         out_part(1:Ni_out,m) = 
+!     x        pack(B_out_buf(1:Ni_tot_out_buf,m), .not.
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!         B_out_buf(1:Ni_tot_in,m) = pack(B_out_buf(1:Ni_tot_out_buf,m), 
+!     x        ib_out_buf(1:Ni_tot_out_buf))
+!      enddo
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      B_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
-
-
-c      out_mass(1:Ni_out) = 
-c     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), .not.
-c     x     ib_out_buf(1:Ni_tot_out_buf))
-c      m_arr_out_buf(1:Ni_tot_in) = 
-c     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), 
-c     x     ib_out_buf(1:Ni_tot_out_buf))
+!      B_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in,:) = in_part(:,:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      out_mass(1:Ni_out) = 
+!     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), .not.
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+!      m_arr_out_buf(1:Ni_tot_in) = 
+!     x     pack(m_arr_out_buf(1:Ni_tot_out_buf), 
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      m_arr_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
-
-
-c      out_mass(1:Ni_out) = 
-c     x     pack(mrat_out_buf(1:Ni_tot_out_buf), .not.
-c     x     ib_out_buf(1:Ni_tot_out_buf))
-c      mrat_out_buf(1:Ni_tot_in) = 
-c     x     pack(mrat_out_buf(1:Ni_tot_out_buf), 
-c     x     ib_out_buf(1:Ni_tot_out_buf))
+!      m_arr_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
 
 
-c      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
-c     x     cartcomm, reqs(1), ierr)
-c      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
-c     x     cartcomm, reqs(2), ierr)
+!      out_mass(1:Ni_out) = 
+!     x     pack(mrat_out_buf(1:Ni_tot_out_buf), .not.
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+!      mrat_out_buf(1:Ni_tot_in) = 
+!     x     pack(mrat_out_buf(1:Ni_tot_out_buf), 
+!     x     ib_out_buf(1:Ni_tot_out_buf))
+
+
+!      call MPI_ISEND(out_part, 3*Ni_out, MPI_REAL, dest, tag, 
+!     x     cartcomm, reqs(1), ierr)
+!      call MPI_IRECV(in_part, 3*Ni_in, MPI_REAL, source, tag,
+!     x     cartcomm, reqs(2), ierr)
       
-c      call MPI_WAITALL(2, reqs, stats, ierr)
+!      call MPI_WAITALL(2, reqs, stats, ierr)
 
-c      mrat_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
+!      mrat_out_buf(Ni_tot_in+1:Ni_tot_in+Ni_in) = in_mass(:)
 
 
-c      Ni_tot_out_buf = Ni_tot_out_buf - Ni_out + Ni_in
+!      Ni_tot_out_buf = Ni_tot_out_buf - Ni_out + Ni_in
 
-c      deallocate(out_part)
-c      deallocate(out_mass)
+!      deallocate(out_part)
+!      deallocate(out_mass)
 
-c      deallocate(in_part)
-c      deallocate(in_mass)
+!      deallocate(in_part)
+!      deallocate(in_mass)
 
       where (xp_out_buf(:,3) .ge. qz(nz))
          xp_out_buf(:,3) = qz(2) + ( xp_out_buf(:,3) - qz(nz) )
@@ -1236,14 +1236,14 @@ c      deallocate(in_mass)
 
       return
       end SUBROUTINE move_ion_out_buf
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE push_part_test(E,B,x,v,mr,vpls_out_buf)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real E(3)
       real B(3)
@@ -1262,21 +1262,21 @@ c      include 'incurv.h'
 
       dth = dt/2
 
-c      write(*,*) 'part push 1...',v(:)
+!      write(*,*) 'part push 1...',v(:)
 
-c      do m=1,3
-c         aa(m) = -v(m)
-c         bb(m) = B(m)                   
-c      enddo
+!      do m=1,3
+!         aa(m) = -v(m)
+!         bb(m) = B(m)                   
+!      enddo
       
-c      cc(1) = aa(2)*bb(3) - aa(3)*bb(2) !do cross product
-c      cc(2) = aa(3)*bb(1) - aa(1)*bb(3)
-c      cc(3) = aa(1)*bb(2) - aa(2)*bb(1)
+!      cc(1) = aa(2)*bb(3) - aa(3)*bb(2) !do cross product
+!      cc(2) = aa(3)*bb(1) - aa(1)*bb(3)
+!      cc(3) = aa(1)*bb(2) - aa(2)*bb(1)
       
-c         E(:)= E(:)*mr 
+!         E(:)= E(:)*mr 
       
-c         write(*,*) 'part push...',E(3),B(2),
-c     x               x(1),v(1),mr
+!         write(*,*) 'part push...',E(3),B(2),
+!     x               x(1),v(1),mr
 
 
       do m=1,3
@@ -1313,11 +1313,11 @@ c     x               x(1),v(1),mr
 
       vpls_out_buf(:) = vpls(:) + 0.5*dth*E(:)*mr
 
-c      write(*,*) 'part push 2...',vpls_out_buf(:)
+!      write(*,*) 'part push 2...',vpls_out_buf(:)
 
       return
       end SUBROUTINE push_part_test
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
       end MODULE gutsp_buf
 

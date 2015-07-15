@@ -1,9 +1,9 @@
       MODULE DIMENSIONS
 
-c simulation domain dimensions
+! simulation domain dimensions
 
       PARAMETER (nx = 79, ny = 39, nz = 7)
-c particle array dimensions
+! particle array dimensions
 
       integer*4 Ni_max, Ni_max_buf
       PARAMETER (Ni_max = 2000000)

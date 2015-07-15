@@ -20,32 +20,32 @@
       PARAMETER (q = 1.6e-19)        !electron charge (Coulombs)
       real lambda_i                  !ion inertial length
 
-c grid parameters
+! grid parameters
 
       real dx,dy, delz, dx_buf, dt, dtsub_init
 
-c time stepping parameters
+! time stepping parameters
       PARAMETER (ntsub = 10.0)        !number of subcycle time steps
 
-c output directory
+! output directory
       character(50) out_dir
-c      PARAMETER (out_dir='./tmp3/')
+!      PARAMETER (out_dir='./tmp3/')
 
-c logical variable for restart
+! logical variable for restart
       logical restart
       PARAMETER (restart = .false.)
       PARAMETER (mrestart = 6000)      ! use -1 for no save
       PARAMETER (mbegin = 0)      !mstart
 
-c neutral cloud expansion characteristics
+! neutral cloud expansion characteristics
       real vtop,vbottom
 
-c max number of ion particles to be produced.  This parameter
-c is used to dimension the particle arrays.
+! max number of ion particles to be produced.  This parameter
+! is used to dimension the particle arrays.
       integer*4 Ni_tot_0
 
 
-c misc constants
+! misc constants
       real*8 mu0,epsilon,pi,rtod,mO,mBa,km_to_m,kboltz,melec
       real*8 tempf0,m_pu
       real*8 mproton, eoverm, O_to_Ba
@@ -54,12 +54,12 @@ c misc constants
       PARAMETER (mu0 = pi*4.0e-7)    !magnetic permeability of free space
       PARAMETER (epsilon = 8.85e-12) !dielectric constant
 
-c      PARAMETER (m_pu = 64.0)
+!      PARAMETER (m_pu = 64.0)
       PARAMETER (mproton = 1.67e-27)
-c      PARAMETER (mO = 2.3e-25)    !mass of Ba (kg)
+!      PARAMETER (mO = 2.3e-25)    !mass of Ba (kg)
       PARAMETER (m_pu = 28.0)
-c      PARAMETER (mBa = m_pu*mO)    !mass of Ba (kg)
-c      PARAMETER (O_to_Ba = mO/mBa) !convert E and B for particle move
+!      PARAMETER (mBa = m_pu*mO)    !mass of Ba (kg)
+!      PARAMETER (O_to_Ba = mO/mBa) !convert E and B for particle move
 
       PARAMETER (km_to_m = 1e3)       !km to meters conversion
       PARAMETER (kboltz = 1.38e-29)   !kg km^2 / s^2 / K
@@ -70,13 +70,13 @@ c      PARAMETER (O_to_Ba = mO/mBa) !convert E and B for particle move
       real m_top, m_bottom,m_heavy,np_bottom_proton
 
 
-c electron ion collision frequency
+! electron ion collision frequency
       real nu_init,lww1,lww2
 
       PARAMETER (lww2 = 1.0)           !must be less than 1.0
       PARAMETER (lww1 = (1-lww2)/6.0)  !divide by six for nearest neighbor
 
-c density scaling parameter, alpha, and ion particle array dims
+! density scaling parameter, alpha, and ion particle array dims
        
       real*8 alpha, beta_pu  
       PARAMETER (beta_pu = 0.1)
@@ -86,16 +86,16 @@ c density scaling parameter, alpha, and ion particle array dims
       integer S_radius
       PARAMETER (Qo = 3e27)     !neutral source rate
       PARAMETER (vrad = 0.05)   !escape velocity
-c      PARAMETER (N_o = 5e34)   !Steady state neutral particle constant
+!      PARAMETER (N_o = 5e34)   !Steady state neutral particle constant
       PARAMETER (N_o = 1e33)   !Steady state neutral particle constant
       PARAMETER (RIo = 1200.0)  !Io radius
       PARAMETER (tau_photo = 1.5e9)
       PARAMETER (k_rec = 1e-5/1e15) !km^3 s^-1
-c      PARAMETER (dNi = 2500)
+!      PARAMETER (dNi = 2500)
       PARAMETER (S_radius = 200) !units of dx
       PARAMETER (ri0 = 0) !offset to neutral center
 
-c domain decompostion parameters
+! domain decompostion parameters
 
       integer n_up,n_down,n_left,n_right, cart_dims,comm_sz
       integer io_proc
@@ -115,7 +115,7 @@ c domain decompostion parameters
       data dims /comm_sz,1/, tag /1/ !dimenions, /rows,columns/
 
 
-c solar wind composition
+! solar wind composition
       real f_mq_2,b_mq_2,f_shl,b_shl
       PARAMETER (b_mq_2 = 2.0)
       PARAMETER (f_mq_2 = 0.1/b_mq_2) 
@@ -124,9 +124,9 @@ c solar wind composition
 
       CONTAINS
 
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
       subroutine readInputs()
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
       open(unit=100, file='inputs.dat', status='old')
       
       read(100,*) b0_init
@@ -147,8 +147,8 @@ c----------------------------------------------------------------
       write(*,*) 'vsw...............',vsw
       read(100,*) vth
       write(*,*) 'vth...............',vth
-c      read(100,*) Ni_max
-c      write(*,*) 'Ni_max....',Ni_max
+!      read(100,*) Ni_max
+!      write(*,*) 'Ni_max....',Ni_max
       read(100,*) Ni_tot_frac
       write(*,*) 'Ni_tot_frac.......',Ni_tot_frac
       read(100,*) dx_frac
@@ -160,12 +160,12 @@ c      write(*,*) 'Ni_max....',Ni_max
      
       close(100)
       end subroutine readInputs
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
 
 
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
       subroutine initparameters()
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
 
       mion = ion_amu*1.67e-27
 
@@ -220,12 +220,12 @@ c----------------------------------------------------------------
       alpha = (mu0/1e3)*q*(q/mion) !mH...determines particle scaling
 
       end subroutine initparameters
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
 
 
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
       subroutine check_inputs(my_rank)
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
       integer :: my_rank
 
       real*8 ak, btot, a1, a2, womega, phi, deltat
@@ -266,7 +266,7 @@ c----------------------------------------------------------------
       cwpi = 3e8/sqrt((np_bottom/1e9)*q*q/(epsilon*m_bottom))
       write(*,*) 'Ion inertial length...',cwpi/1e3,cwpi/1e3/dx
 
-c      write(*,*) 'Particles per cell....',Ni_tot_sys/(nx*nz)
+!      write(*,*) 'Particles per cell....',Ni_tot_sys/(nx*nz)
 
       write(*,*) ' '
       write(*,*) 'Top parameters...'
@@ -287,7 +287,7 @@ c      write(*,*) 'Particles per cell....',Ni_tot_sys/(nx*nz)
 
 
       end subroutine check_inputs
-c----------------------------------------------------------------      
+!----------------------------------------------------------------      
 
       
       END MODULE

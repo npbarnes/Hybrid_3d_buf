@@ -8,55 +8,55 @@
       
       contains
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       real FUNCTION neutral_density(r)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real r
       real nn0
 
-c      nn0 = nf_init*2e6
-c      nn0 = Ncol*(pwl+1)/RIo
+!      nn0 = nf_init*2e6
+!      nn0 = Ncol*(pwl+1)/RIo
       nn0 = 2e8*1e15
-c gaussian 
-c      neutral_density = nn0*exp(-(r)**2/(RIo)**2)                  
+! gaussian 
+!      neutral_density = nn0*exp(-(r)**2/(RIo)**2)                  
 
-c power law profile
-c      if (r .le. RIo) then
-c         neutral_density = nn0*10
-c      endif
-c      if (r .gt. RIo) then 
-cc         neutral_density =  nn0*(RIo/r)**(pwl)
-c         neutral_density =  nn0*exp(-(r-RIo)/20.0)
-c      endif
+! power law profile
+!      if (r .le. RIo) then
+!         neutral_density = nn0*10
+!      endif
+!      if (r .gt. RIo) then 
+!c         neutral_density =  nn0*(RIo/r)**(pwl)
+!         neutral_density =  nn0*exp(-(r-RIo)/20.0)
+!      endif
 
-c Pluto isotropic escape
+! Pluto isotropic escape
 
       neutral_density = Qo/(4*PI*r**2*vrad)
 
-c Pluto Strobel Atm
+! Pluto Strobel Atm
 
-c      neutral_density = 4e21*(RIo/r)**16 + 4e16*(RIo/r)**5.0 !+ 
-cc     x     3.4e27/(4*PI*(r*1e3)**2*100.)               !m^-3
-c      neutral_density = neutral_density*1e9 !km^-3
+!      neutral_density = 4e21*(RIo/r)**16 + 4e16*(RIo/r)**5.0 !+ 
+!c     x     3.4e27/(4*PI*(r*1e3)**2*100.)               !m^-3
+!      neutral_density = neutral_density*1e9 !km^-3
 
 
-c      if (neutral_density .ge. 1e22) then 
-c         neutral_density = 1e22
-c      endif
+!      if (neutral_density .ge. 1e22) then 
+!         neutral_density = 1e22
+!      endif
 
-c      write(*,*) 'nden...',neutral_density
+!      write(*,*) 'nden...',neutral_density
 
       return
       end FUNCTION neutral_density
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE res_chex(xp,vp,vp1)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real xp(Ni_max,3)
       real vp(Ni_max,3)
@@ -77,12 +77,12 @@ c      include 'incurv.h'
          r = sqrt((xp(l,1)-cx)**2 + (xp(l,2)-cy)**2 + 
      x            (gz(ijkp(l,3))-cz)**2) !use global coords
          vrel = sqrt(vp(l,1)**2 + vp(l,2)**2 + vp(l,3)**2)
-c         if (r .ge. RIo) then 
+!         if (r .ge. RIo) then 
          nn = neutral_density(r)
-c            nn = nn0*(RIo/r)**(pwl)
-c         else
-c            nn = nn0
-c         endif
+!            nn = nn0*(RIo/r)**(pwl)
+!         else
+!            nn = nn0
+!         endif
          chex_tau = 1./(nn*sigma_chex*vrel)
          chex_prob = dt/chex_tau
 
@@ -91,16 +91,16 @@ c         endif
                input_E = input_E - 
      x              0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /
      x              beta*beta_p(l) 
-c               input_p(m) = input_p(m) - m_arr(l)*vp(l,m)/beta
+!               input_p(m) = input_p(m) - m_arr(l)*vp(l,m)/beta
             enddo                     
             
             vp(l,:) = 0.0
             vp1(l,:) = 0.0
-c            m_arr(l) = m_pu*mproton
+!            m_arr(l) = m_pu*mproton
             mrat(l) = 1./m_pu
-c            beta_p(l) = beta_pu
+!            beta_p(l) = beta_pu
             beta_p(l) = 1.0
-c            write(*,*) 'chex...',l,chex_prob
+!            write(*,*) 'chex...',l,chex_prob
          endif
 
 
@@ -108,17 +108,17 @@ c            write(*,*) 'chex...',l,chex_prob
 
       return
       end SUBROUTINE res_chex
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE Ionize_Io(np,vp,vp1,xp,up,ndot)
-c Ionizes the neutral cloud with a 28 s time constant and fill particle
-c arrays, np, vp, up (ion particle density, velocity, 
-c and bulk velocity).   
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+! Ionizes the neutral cloud with a 28 s time constant and fill particle
+! arrays, np, vp, up (ion particle density, velocity, 
+! and bulk velocity).   
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real np(nx,ny,nz),
      x     vp(Ni_max,3),
@@ -128,9 +128,9 @@ c      include 'incurv.h'
      x     ndot(nx,ny,nz)
 
       real ndot_chex
-c      real neutral_density
+!      real neutral_density
       real r,z1,y1,x1
-c      real function ranf      
+!      real function ranf      
 
       integer flg           !flag for while loop
       real rnd              !random number
@@ -156,23 +156,23 @@ c      real function ranf
                y1 = qy(j) - cy
                z1 = gz(k) - cz !global coordinate
                r = sqrt(x1**2 + y1**2 + z1**2)
-c               ndot_chex = 0.
-c               ndot_chex = nuin(i,j,k)*nf(i,j,k)
-c               if (r .gt. 3.0*Rio) then
-cc                  ndot_chex = nuin(i,j,k)*nf(i,j,k)
-c                  ndot_chex = 0.0
-c               endif
+!               ndot_chex = 0.
+!               ndot_chex = nuin(i,j,k)*nf(i,j,k)
+!               if (r .gt. 3.0*Rio) then
+!c                  ndot_chex = nuin(i,j,k)*nf(i,j,k)
+!                  ndot_chex = 0.0
+!               endif
 
                if (r .gt. 2*RIo) then
                   delta_N = vol*beta*neutral_density(r)*dt/tau_photo
                endif
-c               delta_N = vol*(ndot(i,j,k))*dt*beta
+!               delta_N = vol*(ndot(i,j,k))*dt*beta
 
 
 
                if (delta_N .ge. 1.0) then 
-c               write(*,*) 'delta_N...',my_rank,delta_N,i,j,k
-c                  write(*,*) 'ndot...',delta_N
+!               write(*,*) 'delta_N...',my_rank,delta_N,i,j,k
+!                  write(*,*) 'ndot...',delta_N
                   dNion = nint(delta_N)
                   l1 = Ni_tot + 1
                   Ni_tot = Ni_tot + dNion
@@ -183,8 +183,8 @@ c                  write(*,*) 'ndot...',delta_N
                      xp(l,2) = qy(j) + (pad_ranf())*dy_grid(j)
                      xp(l,3) = qz(k) + (pad_ranf())*dz_grid(k)
                      
-c                     ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
-c                     ijkp(l,2) = floor(xp(l,2)/dy)
+!                     ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
+!                     ijkp(l,2) = floor(xp(l,2)/dy)
 
 
                      ii=0
@@ -208,25 +208,25 @@ c                     ijkp(l,2) = floor(xp(l,2)/dy)
                      kk = kk-1
                      ijkp(l,3)= kk
 
-c                     kk=1
-c                     do 16 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
-c                        ijkp(l,3) = kk !grid
-c                        kk=kk+1
-c 16                  continue
-c                     kk=ijkp(l,3)
-c                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-c                        ijkp(l,3) = kk+1
-c                     endif
+!                     kk=1
+!                     do 16 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
+!                        ijkp(l,3) = kk !grid
+!                        kk=kk+1
+! 16                  continue
+!                     kk=ijkp(l,3)
+!                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!                        ijkp(l,3) = kk+1
+!                     endif
                      
                      mrat(l) = 1.0/m_pu
-c                     m_arr(l) = mproton*m_pu
-c                     Ni_tot = l
+!                     m_arr(l) = mproton*m_pu
+!                     Ni_tot = l
                      cnt = cnt + 1
                      do m=1,3
                         vp1(l,m) = vp(l,m)
                         input_E = input_E + 
      x                     0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /beta
-c                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
+!                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
 
                      enddo                     
                   enddo
@@ -241,8 +241,8 @@ c                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
                      xp(l,2) = qy(j) + (pad_ranf())*dy_grid(j)
                      xp(l,3) = qz(k) + (pad_ranf())*dz_grid(k)
                      
-c                     ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
-c                     ijkp(l,2) = floor(xp(l,2)/dy)
+!                     ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
+!                     ijkp(l,2) = floor(xp(l,2)/dy)
 
 
                      ii=0
@@ -266,29 +266,29 @@ c                     ijkp(l,2) = floor(xp(l,2)/dy)
                      kk = kk-1
                      ijkp(l,3)= kk
                      
-c                     kk=1
-c                     do 18 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
-c                        ijkp(l,3) = kk !grid
-c                        kk=kk+1
-c 18                  continue
-c                     kk=ijkp(l,3)
-c                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-c                        ijkp(l,3) = kk+1
-c                     endif
+!                     kk=1
+!                     do 18 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
+!                        ijkp(l,3) = kk !grid
+!                        kk=kk+1
+! 18                  continue
+!                     kk=ijkp(l,3)
+!                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!                        ijkp(l,3) = kk+1
+!                     endif
 
                      if (ijkp(l,3) .le. 0) then 
                      write(*,*) 'index error...',ijkp(l,3),qz(k),xp(l,3)
                      endif
                      
                      mrat(l) = 1.0/m_pu
-c                     m_arr(l) = mproton*m_pu
+!                     m_arr(l) = mproton*m_pu
                      Ni_tot = l
                      cnt = cnt + 1
                      do m=1,3
                         vp1(l,m) = vp(l,m)
                         input_E = input_E + 
      x                    0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /beta
-c                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
+!                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
                      enddo                     
                   endif
                endif
@@ -300,13 +300,13 @@ c                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
       write(*,*) 'total new ions...',cnt,Ni_tot,my_rank
 
 
-c      call MPI_Barrier(MPI_COMM_WORLD,ierr)
+!      call MPI_Barrier(MPI_COMM_WORLD,ierr)
 
-c      call MPI_ALLREDUCE(cnt,recvbuf,count,
-c     x     MPI_INTEGER,MPI_SUM,MPI_COMM_WORLD,ierr)
+!      call MPI_ALLREDUCE(cnt,recvbuf,count,
+!     x     MPI_INTEGER,MPI_SUM,MPI_COMM_WORLD,ierr)
 
-c      write(*,*) 'total dNi....',recvbuf
-c      stop
+!      write(*,*) 'total dNi....',recvbuf
+!      stop
 
       
       do 60 l = l1,Ni_tot
@@ -324,13 +324,13 @@ c      stop
 
       return
       end SUBROUTINE Ionize_Io
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_ndot(ndot)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real ndot(nx,ny,nz)
       real ndot2(nx,ny,nz)
@@ -354,27 +354,27 @@ c      include 'incurv.h'
                y1 = qy(j) - cy
                z1 = gz(k) - cz !global coordinate
                r = sqrt(x1**2 + y1**2 + z1**2)
-c               theta = atan2(sqrt(x1**2 + y1**2),z1)
-c               phi = atan2(y1,x1)
+!               theta = atan2(sqrt(x1**2 + y1**2),z1)
+!               phi = atan2(y1,x1)
                
-c               dvol = dx*dy*dz_grid(k)
-c shell distribution
-c               ndot(i,j,k) = dvol*exp(-(r - 1.4*RIo)**2/(0.3*RIo)**2)*
-c     x                       sin(theta)
-c power law distribution
-c               if (r .gt. RIo) then
-c                  ndot(i,j,k) = dvol*(Rio/r)**3.5*
-c     x                 sin(theta)
-c               endif
-c               if (r .le. RIo) then 
-c                  ndot(i,j,k) = 0.0
-c               endif
+!               dvol = dx*dy*dz_grid(k)
+! shell distribution
+!               ndot(i,j,k) = dvol*exp(-(r - 1.4*RIo)**2/(0.3*RIo)**2)*
+!     x                       sin(theta)
+! power law distribution
+!               if (r .gt. RIo) then
+!                  ndot(i,j,k) = dvol*(Rio/r)**3.5*
+!     x                 sin(theta)
+!               endif
+!               if (r .le. RIo) then 
+!                  ndot(i,j,k) = 0.0
+!               endif
 
                npofr = vol*beta*neutral_density(r)*dt/tau_photo
                ndot(i,j,k) = exp(-(r - 1.4*RIo)**2/(0.2*RIo)**2)*
      x                       sin(theta)*(cos(phi)+1)/2 !+
-c     x                    0.2*dvol*exp(-(r - 1.2*RIo)**2/(0.1*RIo)**2)*
-c     x                       sin(theta)
+!     x                    0.2*dvol*exp(-(r - 1.2*RIo)**2/(0.1*RIo)**2)*
+!     x                       sin(theta)
                ndot_intgl = ndot_intgl + ndot(i,j,k)
             enddo
          enddo
@@ -390,70 +390,70 @@ c     x                       sin(theta)
 
       write(*,*) 'ndot_intgl_global....',recvbuf,my_rank
 
-c      write(*,*) 'ndot_intgl...',ndot_intgl
-c      ndot = (Mdot/(m_pu*mproton*recvbuf))*ndot
+!      write(*,*) 'ndot_intgl...',ndot_intgl
+!      ndot = (Mdot/(m_pu*mproton*recvbuf))*ndot
       ndot = (Mdot/(m_pu*mproton*recvbuf))*ndot/(dx*dy*delz)
       if (ndot_intgl .lt. 0.001) ndot = 0.0
 
-c add a power law contribution to ndot
+! add a power law contribution to ndot
 
-c      ndot_intgl = 0.0
-c      do i = 1,nx
-c         do j = 1,ny
-c            do k = 1,nz
-c               x1 = qx(i) - cx
-c               y1 = qy(j) - cy
-c               z1 = gz(k) - cz !global coordinate
-c               r = sqrt(x1**2 + y1**2 + z1**2)
-c               theta = atan2(sqrt(x1**2 + y1**2),z1)
-c               phi = atan2(y1,x1)
+!      ndot_intgl = 0.0
+!      do i = 1,nx
+!         do j = 1,ny
+!            do k = 1,nz
+!               x1 = qx(i) - cx
+!               y1 = qy(j) - cy
+!               z1 = gz(k) - cz !global coordinate
+!               r = sqrt(x1**2 + y1**2 + z1**2)
+!               theta = atan2(sqrt(x1**2 + y1**2),z1)
+!               phi = atan2(y1,x1)
                
-c               dvol = dx*dy*dz_grid(k)
-c               if (r .gt. RIo) then
-c                  ndot2(i,j,k) = dvol*(Rio/r)**12*
-c     x                 sin(theta)*(cos(phi+PI)+1)/2
-c               endif
-c               if (r .le. RIo) then 
-c                  ndot2(i,j,k) = 0.0
-c               endif
+!               dvol = dx*dy*dz_grid(k)
+!               if (r .gt. RIo) then
+!                  ndot2(i,j,k) = dvol*(Rio/r)**12*
+!     x                 sin(theta)*(cos(phi+PI)+1)/2
+!               endif
+!               if (r .le. RIo) then 
+!                  ndot2(i,j,k) = 0.0
+!               endif
 
-c               ndot_intgl = ndot_intgl + ndot2(i,j,k)*dvol
-c            enddo
-c         enddo
-c      enddo
+!               ndot_intgl = ndot_intgl + ndot2(i,j,k)*dvol
+!            enddo
+!         enddo
+!      enddo
 
-c      call MPI_Barrier(MPI_COMM_WORLD,ierr)
+!      call MPI_Barrier(MPI_COMM_WORLD,ierr)
 
-c      call MPI_ALLREDUCE(ndot_intgl,recvbuf,count,
-c     x     MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+!      call MPI_ALLREDUCE(ndot_intgl,recvbuf,count,
+!     x     MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
 
-c      write(*,*) 'ndot_intgl_global....',recvbuf,my_rank
+!      write(*,*) 'ndot_intgl_global....',recvbuf,my_rank
 
-c      write(*,*) 'ndot_intgl...',ndot_intgl
-c      ndot2 = (Mdot/(mO*recvbuf))*ndot2
-c      if (ndot_intgl .lt. 0.001) ndot2 = 0.0
+!      write(*,*) 'ndot_intgl...',ndot_intgl
+!      ndot2 = (Mdot/(mO*recvbuf))*ndot2
+!      if (ndot_intgl .lt. 0.001) ndot2 = 0.0
 
-c combine shell with power law
+! combine shell with power law
 
-c      ndot = ndot + ndot2
+!      ndot = ndot + ndot2
 
-c      write(*,*) 'Mdot...',sum(ndot)*dx*dy*delz*mO,my_rank
+!      write(*,*) 'Mdot...',sum(ndot)*dx*dy*delz*mO,my_rank
 
       write(*,*) 'Mdot...',sum(ndot)*(dx*dy*delz)*m_pu*mproton,my_rank,
      x         (ndot(nx/2,ny/2,nz/2))
 
-c      write(*,*) 'Max ndot...',maxval(ndot)
-c      stop
+!      write(*,*) 'Max ndot...',maxval(ndot)
+!      stop
 
       return
       end SUBROUTINE get_ndot
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_ndot_gauss(ndot)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real ndot(nx,ny,nz)
       real ndot2(nx,ny,nz)
@@ -504,14 +504,14 @@ c      include 'incurv.h'
 
       return
       end SUBROUTINE get_ndot_gauss
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_ndot_Xianzhe(ndot,nn)
-c     ndot is a density rate (cm-3 s-1)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!     ndot is a density rate (cm-3 s-1)
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real ndot(nx,ny,nz)
       real ndot2(nx,ny,nz)
@@ -520,8 +520,8 @@ c      include 'incurv.h'
       real r, theta, phi, cx,cy,cz
       real x1,y1,z1,dvol,ndot_intgl
 
-c      real RIo_off !now defined as a parameter in para.h
-c      parameter (RIo_off = 0.0)
+!      real RIo_off !now defined as a parameter in para.h
+!      parameter (RIo_off = 0.0)
 
       real recvbuf
       integer count
@@ -542,14 +542,14 @@ c      parameter (RIo_off = 0.0)
                y1 = qy(j) - cy
                z1 = qz(k) - cz !global coordinate
                r = sqrt(x1**2 + y1**2 + z1**2)
-c               theta = atan2(sqrt(x1**2 + y1**2),z1)
-c               phi = atan2(y1,x1)
+!               theta = atan2(sqrt(x1**2 + y1**2),z1)
+!               phi = atan2(y1,x1)
                dvol = dx*dy*dz_grid(k)
 
                if ((r.ge.(Rio+RIO_off)) .and. r .lt. 3*Rio)   then  ! to compare to Linker values
 
-c try Linker again
-c                   ndot(i,j,k)= 5.e6*(r/Rio)**(-3.5)*1.e15/(25.*3600.)  ! no pwl to make it smooth
+! try Linker again
+!                   ndot(i,j,k)= 5.e6*(r/Rio)**(-3.5)*1.e15/(25.*3600.)  ! no pwl to make it smooth
 
                      ndot(i,j,k) =  nn(i,j,k)/ (25. * 3600.) !  timescale for Ioniz = 25 hours
                      ndot(i,j,k) = ndot(i,j,k) *49./64. !  to scale to Xianzhe 7e27 s-1
@@ -578,17 +578,17 @@ c                   ndot(i,j,k)= 5.e6*(r/Rio)**(-3.5)*1.e15/(25.*3600.)  ! no pw
       write(*,*) '   TOTAL XIANZHE (6 Rio) ndot_intgl_global ',recvbuf,my_rank
       endif
 
-c     DOLS I remove the scaling to Mdot from para.h
-c Linker give a rate and that is it (kg cm-3 s-1) but the code wants only km-3s-1
+!     DOLS I remove the scaling to Mdot from para.h
+! Linker give a rate and that is it (kg cm-3 s-1) but the code wants only km-3s-1
       return
       end SUBROUTINE get_ndot_Xianzhe
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE get_nuin(nuin,nn,uf,nf,ndot)
-c----------------------------------------------------------------------
-c      include 'incurv.h'
+!----------------------------------------------------------------------
+!      include 'incurv.h'
 
       real nuin(nx,ny,nz)
       real nn(nx,ny,nz)
@@ -597,27 +597,27 @@ c      include 'incurv.h'
       real ndot(nx,ny,nz)
       real ufc(nx,ny,nz,3) !gather at cell center
 
-c      real sigma_in
-c      parameter (sigma_in = 3.0e-26)
+!      real sigma_in
+!      parameter (sigma_in = 3.0e-26)
 
-c      call periodic(uf)
-c      call periodic_scalar(nf)
+!      call periodic(uf)
+!      call periodic_scalar(nf)
 
       call face_to_center(uf,ufc)
 
-c      call periodic(ufc)
+!      call periodic(ufc)
       
       do i = 1,nx
          do j = 1,ny
             do k = 1,nz
-c               uf2(1) = 0.5*(uf(i,j,k,1) + uf(i-1,j,k,1)) 
-c               uf2(2) = 0.5*(uf(i,j,k,2) + uf(i,j-1,k,2)) 
-c               uf2(3) = 0.5*(uf(i,j,k,3) + uf(i,j,k-1,3)) 
-c               nuin(i,j,k) = sqrt(uf2(1)**2 + uf2(2)**2 + 
-c     x                       uf2(3)**2)*sigma_in*nn(i,j,k)
+!               uf2(1) = 0.5*(uf(i,j,k,1) + uf(i-1,j,k,1)) 
+!               uf2(2) = 0.5*(uf(i,j,k,2) + uf(i,j-1,k,2)) 
+!               uf2(3) = 0.5*(uf(i,j,k,3) + uf(i,j,k-1,3)) 
+!               nuin(i,j,k) = sqrt(uf2(1)**2 + uf2(2)**2 + 
+!     x                       uf2(3)**2)*sigma_in*nn(i,j,k)
                nuin(i,j,k) = sqrt(ufc(i,j,k,1)**2 + ufc(i,j,k,2)**2 + 
      x                       ufc(i,j,k,3)**2)*sigma_in*nn(i,j,k)
-c               nuin(i,j,k) = 10.0*ndot(i,j,k)/nf(i,j,k)
+!               nuin(i,j,k) = 10.0*ndot(i,j,k)/nf(i,j,k)
             enddo
          enddo
       enddo
@@ -626,18 +626,18 @@ c               nuin(i,j,k) = 10.0*ndot(i,j,k)/nf(i,j,k)
 
       return
       end SUBROUTINE get_nuin
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
 
 
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
       SUBROUTINE Ionize_pluto_mp(np,np_2,vp,vp1,xp,m_tstep,input_p,up)
-c Ionizes the neutral cloud with a 28 s time constant and fill particle
-c arrays, np, vp, up (ion particle density, velocity, 
-c and bulk velocity).   
-c----------------------------------------------------------------------
+! Ionizes the neutral cloud with a 28 s time constant and fill particle
+! arrays, np, vp, up (ion particle density, velocity, 
+! and bulk velocity).   
+!----------------------------------------------------------------------
 CVD$R VECTOR
-c      include 'incurv.h'
+!      include 'incurv.h'
 
       real np(nx,ny,nz),
      x     np_2(nx,ny,nz),
@@ -646,12 +646,12 @@ c      include 'incurv.h'
      x     xp(Ni_max,3),
      x     input_p(3),
      x     up(nx,ny,nz,3)
-c     x     gz(nz)
+!     x     gz(nz)
 
       real function ranf      
       real uptot1(3),uptot2(3)
-c      integer*4 dNi         !# of new born ions created in dt
-c      real vol              !volume of grid cell
+!      integer*4 dNi         !# of new born ions created in dt
+!      real vol              !volume of grid cell
 
       real r                !dist of particle to neutral cloud center
       real t                !run time
@@ -662,9 +662,9 @@ c      real vol              !volume of grid cell
       real zsum             !sum along z to find cell for new_borns
       real rnd              !random number
       real n_source,vol_source
-c      real r_xyz       !radial distance
-c      real src(200)         !particle source distribution
-c      real Nofr(200)        !number of neutrals as func of r
+!      real r_xyz       !radial distance
+!      real src(200)         !particle source distribution
+!      real Nofr(200)        !number of neutrals as func of r
       real nnofr       !neutral density vs. r
       real npofr       !plasma production rate vs. r
       real Np_total         !total number of ions /s
@@ -675,18 +675,18 @@ c      real Nofr(200)        !number of neutrals as func of r
       integer rijk
       real ddni
       integer cnt, l1
-c      real neutral_density
+!      real neutral_density
       real npmax
 
-c      integer*4 ion_cnt(nx,ny,nz)  !keeps running count of ions 
+!      integer*4 ion_cnt(nx,ny,nz)  !keeps running count of ions 
                                    !in cell for calculating the bulk
                                    !flow velocity
-c      real vsum(nx,ny,nz,3) !total particle velocity in cell of the
+!      real vsum(nx,ny,nz,3) !total particle velocity in cell of the
                             !new born ions...for get bulk flow
 
       call Neut_Center(cx,cy,cz)
 
-c get source density
+! get source density
 
       
       vol = dx**3
@@ -696,32 +696,32 @@ c get source density
          do j = 2,ny-1
             do k = 2,nz-1
                r = sqrt((qx(i)-cx)**2 + (qy(j)-cy)**2 + (gz(k)-cz)**2)
-c               r = sqrt((xp(l,1)-cx)**2 + (xp(l,2)-cy)**2 + 
-c     x              (gz(ijkp(l,3))-cz)**2) !use global coords
+!               r = sqrt((xp(l,1)-cx)**2 + (xp(l,2)-cy)**2 + 
+!     x              (gz(ijkp(l,3))-cz)**2) !use global coords
 
                !np = electron density, used for recombination
 
-c               npmax = (-k_rec*np(i,j,k) + sqrt((k_rec*np(i,j,k))**2 + 
-c     x              4*k_rec*neutral_density(r)/tau_photo))/(2*k_rec)
+!               npmax = (-k_rec*np(i,j,k) + sqrt((k_rec*np(i,j,k))**2 + 
+!     x              4*k_rec*neutral_density(r)/tau_photo))/(2*k_rec)
                
              
                npmax = sqrt(neutral_density(r)/(tau_photo*k_rec))
 
-c               if ((np_2(i,j,k) .gt. npmax) .and.
-c     x            (np_2(i,j,k) .gt. 0.0)) then
-c                  write(*,*) 'limit ion production...',np_2(i,j,k),
-c     x               npmax
-c               endif
+!               if ((np_2(i,j,k) .gt. npmax) .and.
+!     x            (np_2(i,j,k) .gt. 0.0)) then
+!                  write(*,*) 'limit ion production...',np_2(i,j,k),
+!     x               npmax
+!               endif
                if ((r .le. dx*S_radius) .and.
-c               if ((r .le. dx*4) .and.
+!               if ((r .le. dx*4) .and.
      x              (np_2(i,j,k) .lt. npmax)) then
 
-c                   write(*,*) 'npmax..',npmax,np_2(i,j,k)
+!                   write(*,*) 'npmax..',npmax,np_2(i,j,k)
 
-c                  write(*,*) 'r...',r/(dx*S_radius)
-c                  write(*,*) 'npofr...',r
-c                  nnofr = Qo/(4*pi*r**2*vrad)
-c                  npofr = vol*beta*nnofr*dt/tau_photo
+!                  write(*,*) 'r...',r/(dx*S_radius)
+!                  write(*,*) 'npofr...',r
+!                  nnofr = Qo/(4*pi*r**2*vrad)
+!                  npofr = vol*beta*nnofr*dt/tau_photo
                if (r .le. dx*4) then
                   bpu = beta_pu
                   npofr = vol*beta*bpu*
@@ -731,7 +731,7 @@ c                  npofr = vol*beta*nnofr*dt/tau_photo
                   npofr = vol*beta*
      x                    neutral_density(r)*dt/tau_photo
                endif
-c                  write(*,*) 'npofr...',npofr
+!                  write(*,*) 'npofr...',npofr
                   if ((npofr .ge. 1) .and. (npofr+l1 .lt. Ni_max)) then
                      do ll = 1,nint(npofr)
                         l = Ni_tot + 1
@@ -750,8 +750,8 @@ c                  write(*,*) 'npofr...',npofr
                         ii = ii-1
                         ijkp(l,1)= ii
 
-c                        ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
-c                        ijkp(l,2) = floor(xp(l,2)/dy)
+!                        ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
+!                        ijkp(l,2) = floor(xp(l,2)/dy)
                     
                         jj=0
  18                     continue
@@ -767,18 +767,18 @@ c                        ijkp(l,2) = floor(xp(l,2)/dy)
                         kk = kk-1
                         ijkp(l,3)= kk
 
-c                        kk=1
-c                       do 15 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find ck
-c                           ijkp(l,3) = kk !grid
-c                           kk=kk+1
-c 15                     continue
-c                        kk=ijkp(l,3)
-c                        if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-c                           ijkp(l,3) = kk+1
-c                        endif
+!                        kk=1
+!                       do 15 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find ck
+!                           ijkp(l,3) = kk !grid
+!                           kk=kk+1
+! 15                     continue
+!                        kk=ijkp(l,3)
+!                        if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!                           ijkp(l,3) = kk+1
+!                        endif
                         
                         mrat(l) = 1.0/m_pu
-c                        m_arr(l) = mproton*m_pu
+!                        m_arr(l) = mproton*m_pu
                         beta_p(l) = bpu
                         Ni_tot = l
                         cnt = cnt + 1
@@ -812,8 +812,8 @@ c                        m_arr(l) = mproton*m_pu
                         ii = ii-1
                         ijkp(l,1)= ii
 
-c                        ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
-c                        ijkp(l,2) = floor(xp(l,2)/dy)
+!                        ijkp(l,1) = floor(xp(l,1)/dx) !particle grid location index
+!                        ijkp(l,2) = floor(xp(l,2)/dy)
                         
 
                         jj=0
@@ -830,18 +830,18 @@ c                        ijkp(l,2) = floor(xp(l,2)/dy)
                         kk = kk-1
                         ijkp(l,3)= kk
 
-c                        kk=1
-c                       do 16 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find ck
-c                           ijkp(l,3) = kk !grid
-c                           kk=kk+1
-c 16                     continue
-c                        kk=ijkp(l,3)
-cc                        if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-c                          ijkp(l,3) = kk+1
-c                        endif
+!                        kk=1
+!                       do 16 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find ck
+!                           ijkp(l,3) = kk !grid
+!                           kk=kk+1
+! 16                     continue
+!                        kk=ijkp(l,3)
+!c                        if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!                          ijkp(l,3) = kk+1
+!                        endif
                         
                         mrat(l) = 1.0/m_pu
-c                        m_arr(l) = mproton*m_pu
+!                        m_arr(l) = mproton*m_pu
                         beta_p(l) = bpu
                         Ni_tot = l
                         cnt = cnt + 1
@@ -859,74 +859,74 @@ c                        m_arr(l) = mproton*m_pu
 
                   endif
 
-c                  vol_shell = (4./3.)*pi*((r+dx/2)**3 - (r-dx/2)**3)
-c                  vol_shell_min = (4./3.)*pi*(2.0*Rp)**3
-c                  if (vol_shell .lt. vol_shell_min) then 
-c                     vol_shell = vol_shell_min
-c                  endif
-c                  vol = dx**3
-cc                  dNi_shell = (Qo*beta)*dx*dt/(vrad*tau_photo)
-cc                  dNi_cell = dNi_shell*vol/vol_shell
-cc                  write(*,*) 'dNi_shell...',cart_rank,
-cc     x                  dNi_shell*vol/vol_shell
-c                  rnd = pad_ranf()
-c                  if (dNi_shell*vol/vol_shell .gt. rnd) then
-c                     l = Ni_tot + 1
-c                     vp(l,1) = 0.0
-c                     vp(l,2) = 0.0
-c                     vp(l,3) = 0.0
-cc                     xp(l,1) = qx(i) + (0.5-pad_ranf())*dx
-cc                     xp(l,2) = qy(j) + (0.5-pad_ranf())*dy
-cc                     xp(l,3) = qz(k) + (0.5-pad_ranf())*dz_grid(k)
+!                  vol_shell = (4./3.)*pi*((r+dx/2)**3 - (r-dx/2)**3)
+!                  vol_shell_min = (4./3.)*pi*(2.0*Rp)**3
+!                  if (vol_shell .lt. vol_shell_min) then 
+!                     vol_shell = vol_shell_min
+!                  endif
+!                  vol = dx**3
+!c                  dNi_shell = (Qo*beta)*dx*dt/(vrad*tau_photo)
+!c                  dNi_cell = dNi_shell*vol/vol_shell
+!c                  write(*,*) 'dNi_shell...',cart_rank,
+!c     x                  dNi_shell*vol/vol_shell
+!                  rnd = pad_ranf()
+!                  if (dNi_shell*vol/vol_shell .gt. rnd) then
+!                     l = Ni_tot + 1
+!                     vp(l,1) = 0.0
+!                     vp(l,2) = 0.0
+!                     vp(l,3) = 0.0
+!c                     xp(l,1) = qx(i) + (0.5-pad_ranf())*dx
+!c                     xp(l,2) = qy(j) + (0.5-pad_ranf())*dy
+!c                     xp(l,3) = qz(k) + (0.5-pad_ranf())*dz_grid(k)
 
-c                     xp(l,1) = qx(i) + (pad_ranf())*dx
-c                     xp(l,2) = qy(j) + (pad_ranf())*dy
-c                     xp(l,3) = qz(k) + (pad_ranf())*dz_grid(k)
+!                     xp(l,1) = qx(i) + (pad_ranf())*dx
+!                     xp(l,2) = qy(j) + (pad_ranf())*dy
+!                     xp(l,3) = qz(k) + (pad_ranf())*dz_grid(k)
 
-c                     ijkp(l,1) = nint(xp(l,1)/dx) !particle grid location index
-c                     ijkp(l,2) = nint(xp(l,2)/dy)
+!                     ijkp(l,1) = nint(xp(l,1)/dx) !particle grid location index
+!                     ijkp(l,2) = nint(xp(l,2)/dy)
 
-cc                     kk=1
-cc                     do 50 while(xp(l,3) .gt. qz(kk)) !find k on non-uniform 
-cc                        ijkp(l,3) = kk !grid
-cc                        kk=kk+1
-cc 50                  continue
-cc                     kk=ijkp(l,3)
-cc                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-cc                        ijkp(l,3) = kk+1
-cc                     endif
+!c                     kk=1
+!c                     do 50 while(xp(l,3) .gt. qz(kk)) !find k on non-uniform 
+!c                        ijkp(l,3) = kk !grid
+!c                        kk=kk+1
+!c 50                  continue
+!c                     kk=ijkp(l,3)
+!c                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!c                        ijkp(l,3) = kk+1
+!c                     endif
 
-c                     kk=1
-c                     do 15 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
-c                        ijkp(l,3) = kk !grid
-c                        kk=kk+1
-c 15                  continue
-c                     kk=ijkp(l,3)
-c                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
-c                        ijkp(l,3) = kk+1
-c                     endif
+!                     kk=1
+!                     do 15 while((xp(l,3).gt.qz(kk)).and.(kk .le. nz)) !find k
+!                        ijkp(l,3) = kk !grid
+!                        kk=kk+1
+! 15                  continue
+!                     kk=ijkp(l,3)
+!                     if (xp(l,3) .gt. (qz(kk)+(dz_grid(kk)/2))) then
+!                        ijkp(l,3) = kk+1
+!                     endif
 
-c                     mrat(l) = 1.0/m_pu
-c                     m_arr(l) = mproton*m_pu
-c                     Ni_tot = l
-c                     cnt = cnt + 1
-c                     do 45 m=1,3
-c                        vp1(l,m) = vp(l,m)
-c                        input_E = input_E + 
-c     x                       0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 /beta
-c                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
-c 45                  continue                     
-c                  endif                     
+!                     mrat(l) = 1.0/m_pu
+!                     m_arr(l) = mproton*m_pu
+!                     Ni_tot = l
+!                     cnt = cnt + 1
+!                     do 45 m=1,3
+!                        vp1(l,m) = vp(l,m)
+!                        input_E = input_E + 
+!     x                       0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 /beta
+!                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/beta
+! 45                  continue                     
+!                  endif                     
                endif
             enddo
          enddo
       enddo
 
       
-c      write(*,*) 'total new ions....',my_rank,cnt,Ni_tot         
-c      call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+!      write(*,*) 'total new ions....',my_rank,cnt,Ni_tot         
+!      call MPI_BARRIER(MPI_COMM_WORLD,ierr)
 
-c      stop
+!      stop
 
       do 60 l = l1,Ni_tot
          if ((ijkp(l,1) .gt. nx) .or. (ijkp(l,2) .gt. ny) .or. 
@@ -937,18 +937,18 @@ c      stop
          endif
  60   continue
 
-c      stop
+!      stop
 
-c      write(*,*) 'Ni_tot after wake....',Ni_tot
+!      write(*,*) 'Ni_tot after wake....',Ni_tot
 
-c      call get_interp_weights(xp)
-c      call update_np(np)
-c      call update_up(vp,np,up)
+!      call get_interp_weights(xp)
+!      call update_np(np)
+!      call update_up(vp,np,up)
 
 
       
       return
       end SUBROUTINE Ionize_pluto_mp
-c----------------------------------------------------------------------
+!----------------------------------------------------------------------
 
       end MODULE chem_rates
