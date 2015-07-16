@@ -859,7 +859,8 @@ CVD$F VECTOR
       in_bounds(Ni_tot+1:) = .false.
       
       where(xp(1:Ni_tot,1) .le. qx(1))
-     X     in_bounds(1:Ni_tot) = .false.
+          in_bounds(1:Ni_tot) = .false.
+      endwhere
 
       Ni_tot_in = count(in_bounds)
       Ni_out = count(.not.in_bounds(1:Ni_tot))
