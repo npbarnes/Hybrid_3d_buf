@@ -768,11 +768,9 @@ CVD$F VECTOR
       real E_out_buf(Ni_max_buf,3)
       real B_out_buf(Ni_max_buf,3)
       real mrat_out_buf(Ni_max_buf)
-!      real m_arr_out_buf(Ni_max_buf)
 
       real, dimension(:,:), allocatable :: out_xp
       real, dimension(:,:), allocatable :: out_vp
-!      real, dimension(:), allocatable :: out_m_arr
       real, dimension(:), allocatable :: out_mrat
       real, dimension(:), allocatable :: out_beta_p
       real, dimension(:,:), allocatable :: out_E
@@ -787,10 +785,6 @@ CVD$F VECTOR
       
       where (xp(1:Ni_tot,1) .gt. qx(nx))
          in_bounds(1:Ni_tot) = .false.
-!     ijkp(:,1) = 1
-!     wquad(:,1) = 0
-!     xp(:,1) = qx(1) + ( xp(:,1) - qx(nx-1) )
-!     ijkp(:,1) = nint(xp(:,1)/dx)
       endwhere
       
       Ni_tot_in = count(in_bounds)
@@ -798,7 +792,6 @@ CVD$F VECTOR
       
       allocate(out_xp(Ni_out,3))
       allocate(out_vp(Ni_out,3))
-!      allocate(out_m_arr(Ni_out))
       allocate(out_mrat(Ni_out))
       allocate(out_beta_p(Ni_out))
       
@@ -808,22 +801,11 @@ CVD$F VECTOR
      x        .not.in_bounds(1:Ni_tot))
          out_vp(1:Ni_out,m) = pack(vp(1:Ni_tot,m), 
      x        .not.in_bounds(1:Ni_tot))
-!         xp(1:Ni_tot_in,m) = pack(xp(1:Ni_tot,m), 
-!     x        in_bounds(1:Ni_tot))
-!         vp(1:Ni_tot_in,m) = pack(vp(1:Ni_tot,m), 
-!     x        in_bounds(1:Ni_tot))
-!         vp1(1:Ni_tot_in,m) = pack(vp1(1:Ni_tot,m), 
-!     x        in_bounds(1:Ni_tot))
-!         ijkp(1:Ni_tot_in,m) = pack(ijkp(1:Ni_tot,m),
-!     x        in_bounds(1:Ni_tot))
-!c         wquad(1:Ni_tot_in,m) = pack(wquad(1:Ni_tot,m),
-!c     x        in_bounds(1:Ni_tot))
       enddo
  
       call pack_pd(xp, in_bounds, 3)
       call pack_pd(vp, in_bounds, 3)
       call pack_pd(vp1, in_bounds, 3)      
-!      call pack_pd_3(ijkp, in_bounds)
 
       cnt = 1
       do l = 1,Ni_tot
@@ -834,26 +816,13 @@ CVD$F VECTOR
       enddo
 
      
-!      do m = 1,8
-!         wght(1:Ni_tot_in,m) = pack(wght(1:Ni_tot,m),
-!     x        in_bounds(1:Ni_tot))
-!      enddo
  
       call pack_pd(wght, in_bounds, 8)
       
-!      out_m_arr(1:Ni_out) = pack(m_arr(1:Ni_tot), 
-!     x     .not.in_bounds(1:Ni_tot))
       out_mrat(1:Ni_out) = pack(mrat(1:Ni_tot), 
      x     .not.in_bounds(1:Ni_tot))
       out_beta_p(1:Ni_out) = pack(beta_p(1:Ni_tot), 
      x     .not.in_bounds(1:Ni_tot))
-      
-!c      m_arr(1:Ni_tot_in) = pack(m_arr(1:Ni_tot), 
-!c     x     in_bounds(1:Ni_tot))
-!      mrat(1:Ni_tot_in) = pack(mrat(1:Ni_tot), 
-!     x     in_bounds(1:Ni_tot))
-!      beta_p(1:Ni_tot_in) = pack(beta_p(1:Ni_tot), 
-!     x     in_bounds(1:Ni_tot))
       
       call pack_pd(mrat, in_bounds, 1)
       call pack_pd(beta_p, in_bounds, 1)
@@ -863,31 +832,18 @@ CVD$F VECTOR
          vp_buf(Ni_tot_buf+1:Ni_tot_buf+Ni_out,m) = out_vp(:,m)
       enddo
       
-!      m_arr_buf(Ni_tot_buf+1:Ni_tot_buf+Ni_out) = out_m_arr(:)
       mrat_buf(Ni_tot_buf+1:Ni_tot_buf+Ni_out) = out_mrat(:)
       beta_p_buf(Ni_tot_buf+1:Ni_tot_buf+Ni_out) = out_beta_p(:)
       
-!     remove energy
 
       do l = 1,Ni_out  
          do m=1,3
             input_E = input_E - 
      x           0.5*(mion/out_mrat(l))*(out_vp(l,m)*km_to_m)**2 /
      x           (beta*out_beta_p(l))
-!     input_p(m) = input_p(m) - (mion/mrat(l))*vp(l,m) / 
-!     x                    (beta*beta_p(l))
          enddo         
       enddo
 
-!      do l = Ni_tot_in+1,Ni_tot  
-!         do m=1,3
-!            input_E = input_E - 
-!     x           0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /
-!     x               (beta*beta_p(l))
-!            input_p(m) = input_p(m) - (mion/mrat(l))*vp(l,m) / 
-!     x                    (beta*beta_p(l))
-!         enddo         
-!      enddo
       
       Ni_tot_buf = Ni_tot_buf + Ni_out
       Ni_tot = count(in_bounds)
@@ -895,7 +851,6 @@ CVD$F VECTOR
       
       deallocate(out_xp)
       deallocate(out_vp)
-!      deallocate(out_m_arr)
       deallocate(out_mrat)
       deallocate(out_beta_p)
       
@@ -903,12 +858,9 @@ CVD$F VECTOR
       in_bounds(1:Ni_tot) = .true.
       in_bounds(Ni_tot+1:) = .false.
       
-!     where(xp(Ni_tot_sw+1:Ni_tot,1) .le. qx(1)) 
-!     x            in_bounds(Ni_tot_sw+1:Ni_tot) = .false.
-      
       where(xp(1:Ni_tot,1) .le. qx(1))
      X     in_bounds(1:Ni_tot) = .false.
-!      endwhere         
+
       Ni_tot_in = count(in_bounds)
       Ni_out = count(.not.in_bounds(1:Ni_tot))
       
@@ -917,7 +869,6 @@ CVD$F VECTOR
       allocate(out_E(Ni_out,3))
       allocate(out_B(Ni_out,3))
       allocate(out_ijkp(Ni_out,3))
-!      allocate(out_m_arr(Ni_out))
       allocate(out_mrat(Ni_out))
       allocate(out_beta_p(Ni_out))
       
@@ -930,17 +881,11 @@ CVD$F VECTOR
          out_ijkp(1:Ni_out,m) = pack(ijkp(1:Ni_tot,m), 
      x        .not.in_bounds(1:Ni_tot))
          
-!         xp(1:Ni_tot_in,m) = pack(xp(1:Ni_tot,m), in_bounds(1:Ni_tot))
-!         vp(1:Ni_tot_in,m) = pack(vp(1:Ni_tot,m), in_bounds(1:Ni_tot))
-!         vp1(1:Ni_tot_in,m) = pack(vp1(1:Ni_tot,m), in_bounds(1:Ni_tot))
-!         ijkp(1:Ni_tot_in,m)=pack(ijkp(1:Ni_tot,m), in_bounds(1:Ni_tot))
-!c        wquad(1:Ni_tot_in,m)=pack(wquad(1:Ni_tot,m),in_bounds(1:Ni_tot))
       enddo
 
       call pack_pd(xp, in_bounds, 3)
       call pack_pd(vp, in_bounds, 3)
       call pack_pd(vp1, in_bounds, 3)
-!      call pack_pd_3(ijkp, in_bounds)
 
       cnt = 1
       do l = 1,Ni_tot
@@ -950,22 +895,13 @@ CVD$F VECTOR
         endif
       enddo
 
-
-      
       do l = 1,Ni_out 
          out_E(l,:) = E(out_ijkp(l,1),out_ijkp(l,2),out_ijkp(l,3),:)
          out_B(l,:) = Bt(out_ijkp(l,1),out_ijkp(l,2),out_ijkp(l,3),:)
       enddo
 
-
-!      do m = 1,8
-!         wght(1:Ni_tot_in,m)=pack(wght(1:Ni_tot,m), in_bounds(1:Ni_tot))
-!      enddo
- 
       call pack_pd(wght, in_bounds, 8)
      
-!      out_m_arr(1:Ni_out) = pack(m_arr(1:Ni_tot), 
-!     x     .not.in_bounds(1:Ni_tot))
       out_mrat(1:Ni_out) = pack(mrat(1:Ni_tot), 
      x     .not.in_bounds(1:Ni_tot))
       out_beta_p(1:Ni_out) = pack(beta_p(1:Ni_tot), 
@@ -984,48 +920,25 @@ CVD$F VECTOR
      x        out_B(1:Ni_out,m)
       enddo
       
-
-!      m_arr_out_buf(Ni_tot_out_buf+1:Ni_tot_out_buf+Ni_out) = 
-!     x     out_m_arr(:)
-      
       mrat_out_buf(Ni_tot_out_buf+1:Ni_tot_out_buf+Ni_out) = 
      x     out_mrat(:)
       
-!c      m_arr(1:Ni_tot_in) = pack(m_arr(1:Ni_tot), in_bounds(1:Ni_tot))
-!      mrat(1:Ni_tot_in) = pack(mrat(1:Ni_tot), in_bounds(1:Ni_tot))
-!      beta_p(1:Ni_tot_in) = pack(beta_p(1:Ni_tot), in_bounds(1:Ni_tot))
 
       call pack_pd(mrat, in_bounds, 1)
       call pack_pd(beta_p, in_bounds, 1)
             
-!     remove energy
 
       do l = 1,Ni_out  
          do m=1,3
             input_E = input_E - 
      x           0.5*(mion/out_mrat(l))*(out_vp(l,m)*km_to_m)**2 /
      x           (beta*out_beta_p(l))
-!     input_p(m) = input_p(m) - (mion/mrat(l))*vp(l,m) / 
-!     x                    (beta*beta_p(l))
          enddo         
       enddo
       
-!      do l = Ni_tot_in+1,Ni_tot  
-!         do m=1,3
-!            input_E = input_E - 
-!     x           0.5*(mion/mrat(l))*(vp(l,m)*km_to_m)**2 /
-!     x           (beta*beta_p(l))
-!            input_p(m) = input_p(m) - (mion/mrat(l))*vp(l,m) / 
-!     x                   (beta*beta_p(l))
-!         enddo         
-!      enddo
       
       Ni_tot_out_buf = Ni_tot_out_buf + Ni_out
 
-!      if (Ni_tot_out_buf .ge. Ni_max_buf) then 
-!         write(*,*) 'Error....out buf too small...',Ni_tot_out_buf,
-!     x        Ni_max_buf
-!      endif
       
 
       deallocate(out_xp)
@@ -1033,7 +946,6 @@ CVD$F VECTOR
       deallocate(out_E)
       deallocate(out_B)
       deallocate(out_ijkp)
-!      deallocate(out_m_arr)
       deallocate(out_mrat)
       deallocate(out_beta_p)
       
