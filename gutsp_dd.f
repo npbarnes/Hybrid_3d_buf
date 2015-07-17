@@ -944,7 +944,7 @@ CVD$F VECTOR
       enddo
       
       
-      Ni_tot_out_buf = Ni_tot_out_buf + Ni_out
+      !Ni_tot_out_buf = Ni_tot_out_buf + Ni_out
 
       
 
