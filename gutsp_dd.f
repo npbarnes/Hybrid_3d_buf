@@ -754,7 +754,6 @@ CVD$F VECTOR
      x                      B_out_buf,mrat_out_buf) 
 !----------------------------------------------------------------------
 !      include 'incurv.h'
-      use iso_fortran_env, only:error_unit
 
       real xp(Ni_max,3),
      x     vp(Ni_max,3),
@@ -790,7 +789,6 @@ CVD$F VECTOR
       
       Ni_tot_in = count(in_bounds)
       Ni_out = count(.not.in_bounds(1:Ni_tot))
-
       
       allocate(out_xp(Ni_out,3))
       allocate(out_vp(Ni_out,3))
@@ -912,10 +910,6 @@ CVD$F VECTOR
       
       call MPI_Barrier(MPI_COMM_WORLD,ierr)
 
-      if(my_rank .eq. 0) then
-            write(error_unit,*) "Ni_out:",Ni_out
-            write(error_unit,*) "Ni_tot_out_buf:",Ni_tot_out_buf
-      endif
       do m = 1,3
          xp_out_buf(Ni_tot_out_buf+1:Ni_tot_out_buf+Ni_out,m) = 
      x        out_xp(1:Ni_out,m)
