@@ -1,5 +1,5 @@
 #F77 = mpif90 -i4 -r4 -O2 -byteswapio
-F77 = mpif90 -g3 -fbounds-check -Og 
+F77 = mpif90 -g3 -fcheck=all -Og 
 
 FILES = dimensions.f inputs.f global.f misc.f  boundary.f grid_interp.f gutsp_dd.f  gutsp_dd.f  gutsf.f part_init.f gutsp_buf.f chem_rates.f maind.f 
 DEBUG = -check all -g -warn
