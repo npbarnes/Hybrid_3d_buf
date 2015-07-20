@@ -377,7 +377,7 @@
 
 
 !----------------------------------------------------------------------
-      SUBROUTINE exchange_ion_half_buf(xp_buf,vp_buf,xp,vp,vp1)
+      SUBROUTINE exchange_ion_in_buf(xp_buf,vp_buf,xp,vp,vp1)
 !----------------------------------------------------------------------
 !      include 'incurv.h'
 
@@ -516,7 +516,7 @@
 
 
       return
-      end SUBROUTINE exchange_ion_half_buf
+      end SUBROUTINE exchange_ion_in_buf
 !----------------------------------------------------------------------
 
 
@@ -832,7 +832,6 @@
 !        m_arr_out_buf(1:Ni_tot_in) = 
 !     x           pack(m_arr_out_buf(1:Ni_tot_out_buf), 
 !     x           in_bounds_buf(1:Ni_tot_out_buf))
-
 
 
       Ni_tot_out_buf = count(in_bounds_buf)

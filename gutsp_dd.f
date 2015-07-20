@@ -748,10 +748,9 @@ CVD$F VECTOR
 !----------------------------------------------------------------------
 
 
+
 !----------------------------------------------------------------------
-      SUBROUTINE exchange_ion_half(xp,vp,vp1,input_p,xp_buf,vp_buf,E,Bt,
-     x                      xp_out_buf,vp_out_buf,E_out_buf,
-     x                      B_out_buf,mrat_out_buf) 
+      SUBROUTINE exchange_ion_in(xp,vp,vp1,input_p,xp_buf,vp_buf) 
 !----------------------------------------------------------------------
 !      include 'incurv.h'
 
@@ -854,7 +853,47 @@ CVD$F VECTOR
       deallocate(out_mrat)
       deallocate(out_beta_p)
       
-      
+
+      return
+      end SUBROUTINE exchange_ion_in
+c----------------------------------------------------------------------
+
+
+
+c----------------------------------------------------------------------
+      SUBROUTINE exchange_ion_out(xp,vp,vp1,input_p,xp_buf,vp_buf,
+     x     E,Bt,xp_out_buf,vp_out_buf,E_out_buf,
+     x     B_out_buf,mrat_out_buf) 
+c----------------------------------------------------------------------
+c      include 'incurv.h'
+
+      real xp(Ni_max,3),
+     x     vp(Ni_max,3),
+     x     vp1(Ni_max,3),
+     x     input_p(3)
+      real xp_buf(Ni_max_buf,3)
+      real vp_buf(Ni_max_buf,3)
+      real E(nx,ny,nz,3)
+      real Bt(nx,ny,nz,3)
+      real xp_out_buf(Ni_max_buf,3)
+      real vp_out_buf(Ni_max_buf,3)
+      real E_out_buf(Ni_max_buf,3)
+      real B_out_buf(Ni_max_buf,3)
+      real mrat_out_buf(Ni_max_buf)
+c      real m_arr_out_buf(Ni_max_buf)
+
+      real, dimension(:,:), allocatable :: out_xp
+      real, dimension(:,:), allocatable :: out_vp
+c      real, dimension(:), allocatable :: out_m_arr
+      real, dimension(:), allocatable :: out_mrat
+      real, dimension(:), allocatable :: out_beta_p
+      real, dimension(:,:), allocatable :: out_E
+      real, dimension(:,:), allocatable :: out_B
+      integer, dimension(:,:), allocatable :: out_ijkp
+      integer Ni_tot_in, Ni_out
+      integer :: cnt
+
+
       in_bounds(1:Ni_tot) = .true.
       in_bounds(Ni_tot+1:) = .false.
       
@@ -895,7 +934,7 @@ CVD$F VECTOR
            cnt = cnt+1
         endif
       enddo
-
+      
       do l = 1,Ni_out 
          out_E(l,:) = E(out_ijkp(l,1),out_ijkp(l,2),out_ijkp(l,3),:)
          out_B(l,:) = Bt(out_ijkp(l,1),out_ijkp(l,2),out_ijkp(l,3),:)
@@ -939,7 +978,6 @@ CVD$F VECTOR
       
       
       !Ni_tot_out_buf = Ni_tot_out_buf + Ni_out
-
       
 
       deallocate(out_xp)
@@ -954,9 +992,8 @@ CVD$F VECTOR
 
          
       return
-      end SUBROUTINE exchange_ion_half
+      end SUBROUTINE exchange_ion_out
 !----------------------------------------------------------------------
-
 
 
 

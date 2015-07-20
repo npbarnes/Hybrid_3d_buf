@@ -119,28 +119,6 @@
       endif
       end function int_to_str
 
-      if(num .eq. 0) then
-
-      allocate(character(len=1) :: int_to_str)
-      int_to_str = "0"
-
-      else if(num .lt. 0) then
-
-      allocate(character(len=int(log10(float(-num)))+2) :: int_to_str)
-      write(temp,*) num
-      temp = adjustl(temp)
-      int_to_str = trim(temp)
-
-      else
-
-      allocate(character(len=int(log10(float(num)))+1) :: int_to_str)
-      write(temp,*) num
-      temp = adjustl(temp)
-      int_to_str = trim(temp)
-
-      endif
-      end function int_to_str
-
 !----------------------------------------------------------------------
       real FUNCTION ranf()
 ! This is the random number generator that works on foo.
