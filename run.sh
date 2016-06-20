@@ -32,6 +32,6 @@ cp fileShrinker.py $DATA_FOLDER/fileShrinker.py || { printf "Error while copying
 git rev-parse --verify HEAD > $DATA_FOLDER/version.sha1 || { printf "Error getting the git commit sha1.\n"; exit 8; }
 
 # Finally, run the program.
-mpirun -n $1 $DATA_FOLDER/hybrid > $DATA_FOLDER/output 2> $DATA_FOLDER/error &
+/home/nathan/intel/IOMPI1.4/bin/mpirun -n $1 $DATA_FOLDER/hybrid > $DATA_FOLDER/output 2> $DATA_FOLDER/error &
 
 echo Done
