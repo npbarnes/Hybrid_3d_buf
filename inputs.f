@@ -35,7 +35,7 @@ c logical variable for restart
       logical restart
       integer mbegin,mrestart
       PARAMETER (restart = .false.)
-      PARAMETER (mrestart = 10000)      ! use -1 for no save
+      PARAMETER (mrestart = 1000)      ! use -1 for no save
       PARAMETER (mbegin = 0)      !mstart
 
 c neutral cloud expansion characteristics
